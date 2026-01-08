@@ -10,7 +10,7 @@ install-no-dev:  ## Install only production dependencies (no dev)
 	uv sync --no-dev
 
 run:  ## Run app
-	uv run python -m src.safari.main
+	uv run -m src.safari.game
 
 lint:  ## Check code for errors and style issues
 	uv run ruff check .
