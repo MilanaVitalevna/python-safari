@@ -15,7 +15,6 @@ keywords = []
 requires-python = ">=3.12"
 dependencies = [
     "arcade>=3.3.3",
-    "pillow>=11.3.0",
 ]
 
 [dependency-groups]

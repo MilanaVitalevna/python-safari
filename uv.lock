@@ -489,7 +489,6 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "arcade" },
-    { name = "pillow" },
 ]
 
 [package.dev-dependencies]
@@ -503,10 +502,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "arcade", specifier = ">=3.3.3" },
-    { name = "pillow", specifier = ">=11.3.0" },
-]
+requires-dist = [{ name = "arcade", specifier = ">=3.3.3" }]
 
 [package.metadata.requires-dev]
 dev = [
