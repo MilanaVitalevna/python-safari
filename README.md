@@ -64,24 +64,41 @@ make run # если make не установлен, тогда напрямую 
 ## 📁 Архитектура проекта
 
 ```text
-safari-arcade/
-├── resources/  # Ресурсы игры
-│   ├── images/ # Изображения игры
-│   ├── sounds/ # Звуковые эффекты
-│   └── fonts/  # Шрифты
-├── src/safari/ # Основной код игры
-│   ├── ui/
-│   │   └── rules.py # Окно правил
-│   ├── game.py      # Основная логика игры
-│   └── constants.py # Константы игры
-├── tests/ # Тесты
+📁 safari-arcade/
+├── 📁 resources/                    # Ресурсы игры
+│   ├── 📁 images/                   # Изображения игры
+│   │   ├── safari-slot-demo.png
+│   │   └── 📁 ui/
+│   │       ├── bg_back.png
+│   │       ├── bg_front.png
+│   │       └── slot_machine.png
+│   ├── 📁 sounds/                   # Звуки
+│   │   └── start.ogg
+│   └── 📁 fonts/                    # Шрифты
+│       ├── aventura-bold.ttf
+│       └── safari-game-regular.ttf
+├── 📁 src/                          # Исходный код игры
+│   ├── __init__.py
+│   └── 📁 safari/                   # Основной код игры
+│       ├── __init__.py
+│       ├── constants.py
+│       ├── main.py
+│       ├── 📁 ui/                   # Компоненты интерфейса
+│       │   ├── __init__.py
+│       │   └── rules_window.py
+│       └── 📁 views/                # Представления игры (сцены)
+│           ├── __init__.py
+│           ├── game_view.py
+│           └── rules_view.py
+├── 📁 tests/                        # Тесты
+│   └── basic_test.py
 ├── .gitignore
 ├── .pre-commit-config.yaml
 ├── .python-version
-├── Makefile       # Команды для управления проектом
-├── pyproject.toml # Конфигурация проекта
-├── README.md      # Эта документация
-└── uv.lock        # Точные версии зависимостей
+├── Makefile                        # Команды для управления проектом
+├── pyproject.toml                  # Конфигурация проекта
+├── README.md                       # Документация проекта
+└── uv.lock                         # Точные версии зависимостей
 ```
 
 ## 🙏 Благодарности

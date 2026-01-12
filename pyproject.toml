@@ -28,7 +28,7 @@ dev = [
 ]
 
 [project.scripts]
-safari = "src.safari.game:main"
+safari = "src.safari.main:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src"]
