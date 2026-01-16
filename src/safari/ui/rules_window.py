@@ -29,6 +29,61 @@ class RulesManager:
         self.alpha = 0  # Прозрачность окна и текста (0 = скрыто, 255 = видно)
         self.animation_finished = False
 
+        # Основные размеры окна
+        self.window_width = 800
+        self.window_height = 540
+        self.center_x = self.width / 2
+        self.center_y = self.height / 2
+        self.x = self.center_x - self.window_width / 2
+        self.y = self.center_y - self.window_height / 2
+        self.text_color = (166, 36, 31)  # Цвет текста
+
+        # Позиции текста
+        title_y = self.y + self.window_height - 60
+        rules_y = self.y + self.window_height - 100
+
+        # Заголовок "САФАРИ"
+        self.title_text = Text(
+            "САФАРИ",
+            self.center_x,
+            title_y,
+            self.text_color,
+            42,
+            anchor_x="center",
+            anchor_y="center",
+            font_name=SAFARI_FONT_NAME,
+        )
+
+        # Текст правил
+        rules_text = (
+            "ЗАДАЧА ИГРЫ - ПОРАЗИТЬ ВСЕ ЦЕЛИ: 8 ГАЗЕЛЕЙ, 4 БУЙВОЛА И 1 НОСОРОГА.\n"
+            "ВРЕМЯ ИГРЫ - 2 МИНУТЫ, ВСЕГО - 16 ВЫСТРЕЛОВ.\n\n"
+            "ОХОТНИК, УПРАВЛЯЕМЫЙ ИГРОКОМ, СКАЧЕТ ПО НИЖНЕЙ ДОРОЖКЕ, САМОСТОЯТЕЛЬНО ПЕРЕПРЫГИВАЯ ЧЕРЕЗ ПРЕПЯТСТВИЯ. "
+            'ВЫСТРЕЛ ПРОИЗВОДИТСЯ С ПОМОЩЬЮ ЩЕЛЧКА НА КНОПКЕ "ВЫСТРЕЛ" ИЛИ НАЖАТИЯ КЛАВИШИ ПРОБЕЛ НА КЛАВИАТУРЕ. '
+            "ПУЛЯ ЛЕТИТ С ПОСТОЯННОЙ СКОРОСТЬЮ ПОД УГЛОМ 45 ГРАДУСОВ. "
+            "В МОМЕНТ ПРЕОДОЛЕНИЯ ПРЕПЯТСТВИЯ ОСУЩЕСТВЛЕНИЕ ВЫСТРЕЛА НЕВОЗМОЖНО. "
+            "ВО ВРЕМЯ СТРЕЛЬБЫ НУЖНО ИЗБЕГАТЬ ПОПАДАНИЯ В ПАЛЬМЫ, ЧТОБЫ НЕ ТРАТИТЬ ПАТРОНЫ. "
+            "ЕСЛИ ПУЛЯ ПОПАДАЕТ В ЦЕЛЬ, ЖИВОТНОЕ ИСЧЕЗАЕТ С ЭКРАНА "
+            "И ЗАГОРАЕТСЯ СООТВЕТСТВУЮЩАЯ ЛАМПОЧКА НА ПАНЕЛИ АВТОМАТА.\n\n"
+            "В СЛУЧАЕ ПОРАЖЕНИЯ ВСЕХ МИШЕНЕЙ, ИГРОКУ ДАЕТСЯ ПРИЗОВАЯ ИГРА.\n\n"
+            'ДЛЯ ЗАПУСКА ИГРЫ - НАЖМИТЕ КЛАВИШУ "ПРОБЕЛ".\n'
+            'ВЫХОД ИЗ ИГРЫ - С ПОМОЩЬЮ КЛАВИШИ "ESC".'
+        )
+
+        self.rules_text = Text(
+            rules_text,
+            self.center_x,
+            rules_y,
+            self.text_color,
+            11,
+            anchor_x="center",
+            anchor_y="top",
+            multiline=True,
+            width=self.window_width - 60,
+            align="center",
+            font_name=AVENTURA_FONT_NAME,
+        )
+
     def update(self, delta_time: float):
         """Обновление: окно правил плавно появляется в течение 2 секунд."""
         if not self.show_rules:
@@ -41,6 +96,9 @@ class RulesManager:
         if progress >= 1.0:
             self.alpha = 255
             self.animation_finished = True
+
+        self.title_text.color = (166, 36, 31, self.alpha)
+        self.rules_text.color = (166, 36, 31, self.alpha)
 
     def on_draw(self):
         """Отрисовка: затемнение фона сразу, окно правил — с fade-in."""
@@ -60,18 +118,15 @@ class RulesManager:
         if self.alpha == 0:
             return
 
-        # Размеры окна правил (фиксированные)
-        window_width = 800
-        window_height = 540
-        center_x = self.width / 2
-        center_y = self.height / 2
-        x = center_x - window_width / 2
-        y = center_y - window_height / 2
+        # Используем атрибуты, инициализированные в __init__
+        window_width = self.window_width
+        window_height = self.window_height
+        x = self.x
+        y = self.y
 
         # Цвета с прозрачностью (только для окна правил и текста)
         bg_color = (221, 165, 45, self.alpha)  # Фон окна
         border_color = (166, 36, 31, self.alpha)  # Рамка
-        text_color = (166, 36, 31, self.alpha)  # Текст
 
         # === 2. Окно правил — фон и рамка ===
         arcade.draw_lrbt_rectangle_filled(
@@ -87,52 +142,8 @@ class RulesManager:
         )
 
         # === 3. Текст — заголовок и правила ===
-        title_y = y + window_height - 60
-        rules_y = y + window_height - 100
-
-        # Заголовок "САФАРИ"
-        title = Text(
-            "САФАРИ",
-            center_x,
-            title_y,
-            text_color,
-            42,
-            anchor_x="center",
-            anchor_y="center",
-            font_name=SAFARI_FONT_NAME,
-        )
-        title.draw()
-
-        # Текст правил
-        rules_text = (
-            "ЗАДАЧА ИГРЫ - ПОРАЗИТЬ ВСЕ ЦЕЛИ: 8 ГАЗЕЛЕЙ, 4 БУЙВОЛА И 1 НОСОРОГА.\n"
-            "ВРЕМЯ ИГРЫ - 2 МИНУТЫ, ВСЕГО - 16 ВЫСТРЕЛОВ.\n\n"
-            "ОХОТНИК, УПРАВЛЯЕМЫЙ ИГРОКОМ, СКАЧЕТ ПО НИЖНЕЙ ДОРОЖКЕ, САМОСТОЯТЕЛЬНО ПЕРЕПРЫГИВАЯ ЧЕРЕЗ ПРЕПЯТСТВИЯ. "
-            'ВЫСТРЕЛ ПРОИЗВОДИТСЯ С ПОМОЩЬЮ ЩЕЛЧКА НА КНОПКЕ "ВЫСТРЕЛ" ИЛИ НАЖАТИЯ КЛАВИШИ ПРОБЕЛ НА КЛАВИАТУРЕ. '
-            "ПУЛЯ ЛЕТИТ С ПОСТОЯННОЙ СКОРОСТЬЮ ПОД УГЛОМ 45 ГРАДУСОВ. "
-            "В МОМЕНТ ПРЕОДОЛЕНИЯ ПРЕПЯТСТВИЯ ОСУЩЕСТВЛЕНИЕ ВЫСТРЕЛА НЕВОЗМОЖНО. "
-            "ВО ВРЕМЯ СТРЕЛЬБЫ НУЖНО ИЗБЕГАТЬ ПОПАДАНИЯ В ПАЛЬМЫ, ЧТОБЫ НЕ ТРАТИТЬ ПАТРОНЫ. "
-            "ЕСЛИ ПУЛЯ ПОПАДАЕТ В ЦЕЛЬ, ЖИВОТНОЕ ИСЧЕЗАЕТ С ЭКРАНА "
-            "И ЗАГОРАЕТСЯ СООТВЕТСТВУЮЩАЯ ЛАМПОЧКА НА ПАНЕЛИ АВТОМАТА.\n\n"
-            "В СЛУЧАЕ ПОРАЖЕНИЯ ВСЕХ МИШЕНЕЙ, ИГРОКУ ДАЕТСЯ ПРИЗОВАЯ ИГРА.\n\n"
-            'ДЛЯ ЗАПУСКА ИГРЫ - НАЖМИТЕ КЛАВИШУ "ПРОБЕЛ".\n'
-            'ВЫХОД ИЗ ИГРЫ - С ПОМОЩЬЮ КЛАВИШИ "ESC".'
-        )
-
-        rules = Text(
-            rules_text,
-            center_x,
-            rules_y,
-            text_color,
-            11,
-            anchor_x="center",
-            anchor_y="top",
-            multiline=True,
-            width=window_width - 60,
-            align="center",
-            font_name=AVENTURA_FONT_NAME,
-        )
-        rules.draw()
+        self.title_text.draw()
+        self.rules_text.draw()
 
     def hide(self):
         """Скрыть окно с правилами."""
