@@ -56,3 +56,16 @@ TRACK_POSITIONS = [
 TRACK_WIDTH = 590  # Ширина текстуры дорожки в пикселях
 TRACK_ANIMATION_SPEED = 30  # пикселей в секунду
 TRACK_ANIMATION_AMPLITUDE = 4  # ±4 пикселя
+
+# Константы для 4 дорожки (пальмы)
+TRACK_INDEX_PALM = 3  # 4-я дорожка (индекс 3)
+TRACK_Y_PALM = TRACK_POSITIONS[TRACK_INDEX_PALM][1]
+PALM_SPAWN_X = 800
+PALM_DESPAWN_X = TRACK_POSITIONS[TRACK_INDEX_PALM][0]
+PALM_Y_OFFSET = 20  # Y-сдвиг для пальм
+
+PALM_SPEED = 50  # пикселей в секунду
+PALM_SPAWN_INTERVAL_MIN = 4000  # милисекунды
+PALM_SPAWN_INTERVAL_MAX = 6000  # милисекунды
+PALM_ALIVE_SPRITE = ":slot_machine:/images/obstacles/palm_alive.png"
+PALM_DEAD_SPRITE = ":slot_machine:/images/obstacles/palm_dead.png"

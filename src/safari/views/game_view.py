@@ -21,6 +21,7 @@ from ..constants import (
     TRACK_POSITIONS,
     TV_BACKGROUND,
 )
+from ..entities.obstacles.palm_spawner import PalmSpawner
 from ..entities.track import TrackSprite
 
 
@@ -36,6 +37,9 @@ class GameView(arcade.View):
         # Звук галопа
         self.gallop_sound = None
         self.gallop_player = None
+
+        # Инициализируем создателя пальм
+        self.palm_spawner = None
 
         self.setup()
 
@@ -53,12 +57,16 @@ class GameView(arcade.View):
                 track = TrackSprite(track_index=i + 1, x=x, y=y)
                 self.scene["Tracks"].append(track)
 
-            # 3. Блик (поверх дорожек)
+            # 3. Пальмы (ДО эффектов и рамки)
+            self.scene.add_sprite_list("PalmObstacles", use_spatial_hash=True)
+            self.palm_spawner = PalmSpawner(self.scene["PalmObstacles"])
+
+            # 4. Блик (поверх дорожек)
             glare_sprite = arcade.Sprite(GLARE_EFFECT, center_x=SCREEN_CENTER[0], center_y=SCREEN_CENTER[1])
             self.scene.add_sprite_list("Effects")
             self.scene["Effects"].append(glare_sprite)
 
-            # 4. Рамка автомата (самый верхний слой)
+            # 5. Рамка автомата (самый верхний слой)
             frame_sprite = arcade.Sprite(SLOT_MACHINE_FRAME, center_x=SCREEN_CENTER[0], center_y=SCREEN_CENTER[1])
             self.scene.add_sprite_list("Frame")
             self.scene["Frame"].append(frame_sprite)
@@ -79,6 +87,10 @@ class GameView(arcade.View):
         self.scene["Tracks"].update()  # Вызываем update только у TrackSprite
         for track in self.scene["Tracks"]:
             track.on_update(delta_time)
+
+        # Обновляем создателя пальм
+        if self.palm_spawner:
+            self.palm_spawner.update(delta_time)
 
     def on_draw(self):
         self.clear()
