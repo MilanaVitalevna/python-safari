@@ -25,7 +25,7 @@ class PalmSpawner:
 
     def _get_random_interval(self) -> float:
         """Случайный интервал от 4 до 6 секунд (целые значения)."""
-        interval = random.uniform(PALM_SPAWN_INTERVAL_MIN / 1000, PALM_SPAWN_INTERVAL_MAX / 1000)  # noqa: S311
+        interval = random.uniform(PALM_SPAWN_INTERVAL_MIN / 1000, PALM_SPAWN_INTERVAL_MAX / 1000)  # noqa: S311 # nosec
         return interval
 
     def update(self, delta_time: float):

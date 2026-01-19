@@ -3,7 +3,7 @@ import arcade
 from ..constants import TRACK_ANIMATION_AMPLITUDE, TRACK_ANIMATION_SPEED, TRACK_WIDTH
 
 
-class TrackSprite(arcade.Sprite):
+class Track(arcade.Sprite):
     """
     Дорожки с плавной анимацией движения (±4px).
     Имитирует "живую" дорожку — как в старых автоматах.

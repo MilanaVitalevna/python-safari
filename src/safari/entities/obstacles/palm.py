@@ -1,14 +1,13 @@
 import arcade
 
 from src.safari.constants import (
-    PALM_ALIVE_SPRITE,
-    PALM_DEAD_SPRITE,
     PALM_DESPAWN_X,
     PALM_SPAWN_X,
     PALM_SPEED,
     PALM_Y_OFFSET,
     TRACK_Y_PALM,
 )
+from src.safari.resource_manager import Textures
 
 
 class Palm(arcade.Sprite):
@@ -27,8 +26,8 @@ class Palm(arcade.Sprite):
         self.center_y = y + PALM_Y_OFFSET
 
         # Загрузка текстур
-        self.alive_texture = arcade.load_texture(PALM_ALIVE_SPRITE)
-        self.dead_texture = arcade.load_texture(PALM_DEAD_SPRITE)
+        self.alive_texture = Textures.palm_alive
+        self.dead_texture = Textures.palm_dead
         self.texture = self.alive_texture
 
         # Устанавливаем размеры спрайта из текстуры

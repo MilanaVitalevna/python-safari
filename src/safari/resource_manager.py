@@ -2,9 +2,36 @@
 Инициализация внешних ресурсов: шрифты, пути, кастомные префиксы.
 """
 
+from dataclasses import dataclass, field
+
 import arcade
 
-from .constants import AVENTURA_FONT_PATH, RESOURCES_PATH, RESOURCES_PREFIX, SAFARI_FONT_PATH
+from .constants import (
+    AVENTURA_FONT_PATH,
+    # Текстуры препятствий
+    PALM_ALIVE_SPRITE,
+    PALM_DEAD_SPRITE,
+    RESOURCES_PATH,
+    RESOURCES_PREFIX,
+    # Текстуры носорога
+    RHINO_1_SPRITE,
+    RHINO_2_SPRITE,
+    RHINO_3_SPRITE,
+    SAFARI_FONT_PATH,
+)
+
+
+# Простой DateTransferObject для текстур
+@dataclass
+class Textures:
+    """Простой контейнер для всех загруженных текстур."""
+
+    # Текстуры носорога
+    rhino: list[arcade.Texture] = field(default_factory=list)
+
+    # Текстуры пальмы
+    palm_alive: arcade.Texture = None
+    palm_dead: arcade.Texture = None
 
 
 def load_fonts():
@@ -24,14 +51,45 @@ def load_fonts():
         print(f"❌ Ошибка загрузки шрифта: {e}")
 
 
+def load_textures():
+    """Загрузка всех текстур в Textures."""
+    print("🎨 Загрузка текстур...")
+
+    # Загружаем текстуры носорога
+    try:
+        Textures.rhino = [
+            arcade.load_texture(RHINO_1_SPRITE),
+            arcade.load_texture(RHINO_2_SPRITE),
+            arcade.load_texture(RHINO_3_SPRITE),
+        ]
+        print(f"✅ Загружены {len(Textures.rhino)} текстур носорога")
+    except Exception as e:
+        print(f"❌ Ошибка загрузки текстур носорога: {e}")
+        Textures.rhino = []
+
+    # Загружаем текстуры пальмы
+    try:
+        Textures.palm_alive = arcade.load_texture(PALM_ALIVE_SPRITE)
+        Textures.palm_dead = arcade.load_texture(PALM_DEAD_SPRITE)
+        print("✅ Загружены текстуры пальмы")
+    except Exception as e:
+        print(f"❌ Ошибка загрузки текстур пальмы: {e}")
+
+    print("🎨 Загрузка текстур завершена")
+
+
 def setup_resources():
     # Проверяем, что папка существует (для отладки)
     if not RESOURCES_PATH.exists():
         raise FileNotFoundError(f"Папка ресурсов не найдена: {RESOURCES_PATH.resolve()}")
 
-    # Регистрируем собственный префикс для ресурсов
+    # 1. Регистрируем собственный префикс для ресурсов
     # Теперь можно использовать пути вида ":slot_machine:/images/..."
     # Это позволяет легко ссылаться на ресурсы без полных путей
     arcade.resources.add_resource_handle(RESOURCES_PREFIX, RESOURCES_PATH)
 
+    # 2. Загружаем шрифты
     load_fonts()
+
+    # 3. Загружаем текстуры
+    load_textures()

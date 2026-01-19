@@ -21,6 +21,7 @@ FONTS_PATH = RESOURCES_PATH / "fonts"
 
 # Пути к конкретным файлам
 START_SOUND_PATH = SOUNDS_PATH / "start.ogg"
+GALLOP_SOUND_PATH = SOUNDS_PATH / "gallop.ogg"
 SAFARI_FONT_PATH = FONTS_PATH / "safari-game-regular.ttf"
 AVENTURA_FONT_PATH = FONTS_PATH / "aventura-bold.ttf"
 
@@ -43,13 +44,17 @@ SLOT_MACHINE_FRAME = ":slot_machine:/images/ui/slot_machine.png"
 SAFARI_FONT_NAME = "Safari_game"
 AVENTURA_FONT_NAME = "Aventura"
 
+# Границы игрового поля по ширине дорожек
+GAME_FIELD_LEFT = 208  # Левая граница
+GAME_FIELD_RIGHT = 798  # Правая граница
+
 # Координаты дорожек
 TRACK_POSITIONS = [
-    (208, 609),  # Дорожка 1: носорог ← ВЕРХ
-    (208, 533),  # Дорожка 2: быки
-    (208, 459),  # Дорожка 3: газели
-    (208, 325),  # Дорожка 4: пальмы
-    (208, 258),  # Дорожка 5: охотник ← НИЗ
+    (GAME_FIELD_LEFT, 609),  # Дорожка 1: носорог ← ВЕРХ ЭКРАНА
+    (GAME_FIELD_LEFT, 533),  # Дорожка 2: быки
+    (GAME_FIELD_LEFT, 459),  # Дорожка 3: газели
+    (GAME_FIELD_LEFT, 325),  # Дорожка 4: пальмы
+    (GAME_FIELD_LEFT, 258),  # Дорожка 5: охотник ← НИЗ ЭКРАНА
 ]
 
 # Параметры анимации дорожек
@@ -60,8 +65,8 @@ TRACK_ANIMATION_AMPLITUDE = 4  # ±4 пикселя
 # Константы для 4 дорожки (пальмы)
 TRACK_INDEX_PALM = 3  # 4-я дорожка (индекс 3)
 TRACK_Y_PALM = TRACK_POSITIONS[TRACK_INDEX_PALM][1]
-PALM_SPAWN_X = 800
-PALM_DESPAWN_X = TRACK_POSITIONS[TRACK_INDEX_PALM][0]
+PALM_SPAWN_X = GAME_FIELD_RIGHT
+PALM_DESPAWN_X = GAME_FIELD_LEFT - 30
 PALM_Y_OFFSET = 20  # Y-сдвиг для пальм
 
 PALM_SPEED = 50  # пикселей в секунду
@@ -69,3 +74,17 @@ PALM_SPAWN_INTERVAL_MIN = 4000  # милисекунды
 PALM_SPAWN_INTERVAL_MAX = 6000  # милисекунды
 PALM_ALIVE_SPRITE = ":slot_machine:/images/obstacles/palm_alive.png"
 PALM_DEAD_SPRITE = ":slot_machine:/images/obstacles/palm_dead.png"
+
+# Константы для 1 дорожки (носороги)
+TRACK_INDEX_RHINO = 0  # 1-я дорожка (индекс 0)
+TRACK_Y_RHINO = TRACK_POSITIONS[TRACK_INDEX_RHINO][1]
+RHINO_SPAWN_X = GAME_FIELD_RIGHT + 30
+RHINO_DESPAWN_X = GAME_FIELD_LEFT
+RHINO_Y_OFFSET = 20  # Y-сдвиг для носорогов
+
+RHINO_SPEED = 40  # пикселей в секунду
+RHINO_SPAWN_INTERVAL_MIN = 13000  # милисекунды
+RHINO_SPAWN_INTERVAL_MAX = 19500  # милисекунды
+RHINO_1_SPRITE = ":slot_machine:/images/animals/rhino/run_1.png"
+RHINO_2_SPRITE = ":slot_machine:/images/animals/rhino/run_2.png"
+RHINO_3_SPRITE = ":slot_machine:/images/animals/rhino/run_3.png"

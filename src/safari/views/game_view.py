@@ -15,14 +15,16 @@
 import arcade
 
 from ..constants import (
+    GALLOP_SOUND_PATH,
     GLARE_EFFECT,
     SCREEN_CENTER,
     SLOT_MACHINE_FRAME,
     TRACK_POSITIONS,
     TV_BACKGROUND,
 )
+from ..entities.animals.rhino.rhino_spawner import RhinoSpawner
 from ..entities.obstacles.palm_spawner import PalmSpawner
-from ..entities.track import TrackSprite
+from ..entities.track import Track
 
 
 class GameView(arcade.View):
@@ -38,10 +40,17 @@ class GameView(arcade.View):
         self.gallop_sound = None
         self.gallop_player = None
 
-        # Инициализируем создателя пальм
+        # Инициализируем создатели животных и препятствий
         self.palm_spawner = None
+        self.rhino_spawner = None
 
         self.setup()
+        self.start()
+
+    def start(self):
+        """Запускает основные процессы игры."""
+        if self.rhino_spawner:
+            self.rhino_spawner.start()
 
     def setup(self):
         """Загрузка фона игры и инициализация дорожек."""
@@ -54,27 +63,30 @@ class GameView(arcade.View):
             # 2. Дорожки
             self.scene.add_sprite_list("Tracks")
             for i, (x, y) in enumerate(TRACK_POSITIONS):
-                track = TrackSprite(track_index=i + 1, x=x, y=y)
+                track = Track(track_index=i + 1, x=x, y=y)
                 self.scene["Tracks"].append(track)
 
             # 3. Пальмы (ДО эффектов и рамки)
             self.scene.add_sprite_list("PalmObstacles", use_spatial_hash=True)
             self.palm_spawner = PalmSpawner(self.scene["PalmObstacles"])
 
-            # 4. Блик (поверх дорожек)
+            # 5. Носороги (на первой дорожке)
+            self.scene.add_sprite_list("RhinoAnimals", use_spatial_hash=True)
+            self.rhino_spawner = RhinoSpawner(self.scene["RhinoAnimals"])
+
+            # 6. Блик (поверх дорожек)
             glare_sprite = arcade.Sprite(GLARE_EFFECT, center_x=SCREEN_CENTER[0], center_y=SCREEN_CENTER[1])
             self.scene.add_sprite_list("Effects")
             self.scene["Effects"].append(glare_sprite)
 
-            # 5. Рамка автомата (самый верхний слой)
+            # 7. Рамка автомата (самый верхний слой)
             frame_sprite = arcade.Sprite(SLOT_MACHINE_FRAME, center_x=SCREEN_CENTER[0], center_y=SCREEN_CENTER[1])
             self.scene.add_sprite_list("Frame")
             self.scene["Frame"].append(frame_sprite)
 
             # Загрузка звука галопа
             try:
-                gallop_sound_path = ":slot_machine:/sounds/gallop.ogg"
-                self.gallop_sound = arcade.Sound(gallop_sound_path)
+                self.gallop_sound = arcade.Sound(GALLOP_SOUND_PATH)
                 self.gallop_player = self.gallop_sound.play(loop=True)
             except Exception as e:
                 print(f"❌ Ошибка загрузки звука галопа: {e}")
@@ -88,9 +100,11 @@ class GameView(arcade.View):
         for track in self.scene["Tracks"]:
             track.on_update(delta_time)
 
-        # Обновляем создателя пальм
+        # Обновляем создателей
         if self.palm_spawner:
             self.palm_spawner.update(delta_time)
+        if self.rhino_spawner:
+            self.rhino_spawner.update(delta_time, self)
 
     def on_draw(self):
         self.clear()
