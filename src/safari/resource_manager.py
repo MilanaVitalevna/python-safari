@@ -8,6 +8,7 @@ import arcade
 
 from .constants import (
     AVENTURA_FONT_PATH,
+    BARRIER_SPRITE,
     # Текстуры препятствий
     PALM_ALIVE_SPRITE,
     PALM_DEAD_SPRITE,
@@ -32,6 +33,9 @@ class Textures:
     # Текстуры пальмы
     palm_alive: arcade.Texture = None
     palm_dead: arcade.Texture = None
+
+    # Текстура барьера
+    barrier: arcade.Texture = None
 
 
 def load_fonts():
@@ -74,6 +78,16 @@ def load_textures():
         print("✅ Загружены текстуры пальмы")
     except Exception as e:
         print(f"❌ Ошибка загрузки текстур пальмы: {e}")
+
+    # Загружаем текстуру барьера
+    try:
+        if BARRIER_SPRITE is not None:
+            Textures.barrier = arcade.load_texture(BARRIER_SPRITE)
+            print("✅ Загружена текстура барьера")
+        else:
+            print("⚠️ BARRIER_SPRITE не определен")
+    except Exception as e:
+        print(f"❌ Ошибка загрузки текстуры барьера: {e}")
 
     print("🎨 Загрузка текстур завершена")
 

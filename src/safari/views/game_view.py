@@ -23,6 +23,7 @@ from ..constants import (
     TV_BACKGROUND,
 )
 from ..entities.animals.rhino.rhino_spawner import RhinoSpawner
+from ..entities.obstacles.barrier_spawner import BarrierSpawner
 from ..entities.obstacles.palm_spawner import PalmSpawner
 from ..entities.track import Track
 
@@ -43,6 +44,7 @@ class GameView(arcade.View):
         # Инициализируем создатели животных и препятствий
         self.palm_spawner = None
         self.rhino_spawner = None
+        self.barrier_spawner = None
 
         self.setup()
         self.start()
@@ -51,6 +53,8 @@ class GameView(arcade.View):
         """Запускает основные процессы игры."""
         if self.rhino_spawner:
             self.rhino_spawner.start()
+        if self.barrier_spawner:
+            self.barrier_spawner._spawn_barrier()
 
     def setup(self):
         """Загрузка фона игры и инициализация дорожек."""
@@ -69,6 +73,10 @@ class GameView(arcade.View):
             # 3. Пальмы (ДО эффектов и рамки)
             self.scene.add_sprite_list("PalmObstacles", use_spatial_hash=True)
             self.palm_spawner = PalmSpawner(self.scene["PalmObstacles"])
+
+            # 4. Барьеры на пятой дорожке
+            self.scene.add_sprite_list("BarrierObstacles", use_spatial_hash=True)
+            self.barrier_spawner = BarrierSpawner(self.scene["BarrierObstacles"])
 
             # 5. Носороги (на первой дорожке)
             self.scene.add_sprite_list("RhinoAnimals", use_spatial_hash=True)
@@ -105,6 +113,8 @@ class GameView(arcade.View):
             self.palm_spawner.update(delta_time)
         if self.rhino_spawner:
             self.rhino_spawner.update(delta_time, self)
+        if self.barrier_spawner:
+            self.barrier_spawner.update(delta_time)
 
     def on_draw(self):
         self.clear()
