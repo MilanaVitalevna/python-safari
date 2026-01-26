@@ -13,20 +13,21 @@ class BarrierSpawner:
     """
 
     def __init__(self, sprite_list: arcade.SpriteList):
-        self.time_since_last_spawn = 0
+        self.time_since_last_spawn = 0.0
         self.spawn_interval = self._get_random_interval()
         self.active_barriers: list[Barrier] = []
         self.sprite_list = sprite_list
 
-        # Сразу создаем первую пальму при инициализации
+        # Сразу создаем первый барьер при инициализации
         self._spawn_barrier()
-        self.time_since_last_spawn = 0  # Сбрасываем таймер
+        self.time_since_last_spawn = 0.0  # Сбрасываем таймер
         self.spawn_interval = self._get_random_interval()  # Генерируем новый интервал
 
     def _get_random_interval(self) -> float:
         """Случайный интервал от 2 до 3 секунд."""
         interval = random.uniform(  # noqa: S311 # nosec
-            BARRIER_SPAWN_INTERVAL_MIN / 1000, BARRIER_SPAWN_INTERVAL_MAX / 1000
+            BARRIER_SPAWN_INTERVAL_MIN / 1000,  # Конвертируем в секунды
+            BARRIER_SPAWN_INTERVAL_MAX / 1000,
         )
         return interval
 
@@ -37,7 +38,7 @@ class BarrierSpawner:
         # Проверяем интервал
         if self.time_since_last_spawn >= self.spawn_interval:
             self._spawn_barrier()
-            self.time_since_last_spawn = 0
+            self.time_since_last_spawn = 0.0
             self.spawn_interval = self._get_random_interval()
 
         # Обновляем и удаляем старые барьеры
@@ -46,6 +47,7 @@ class BarrierSpawner:
     def _spawn_barrier(self):
         """Создаёт новый барьер."""
         barrier = Barrier()
+        barrier.setup()  # ← Явно вызываем setup для загрузки текстур
 
         self.active_barriers.append(barrier)
         self.sprite_list.append(barrier)

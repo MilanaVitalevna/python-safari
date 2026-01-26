@@ -23,6 +23,7 @@ from ..constants import (
     TV_BACKGROUND,
 )
 from ..entities.animals.rhino.rhino_spawner import RhinoSpawner
+from ..entities.hunter.hunter import Hunter
 from ..entities.obstacles.barrier_spawner import BarrierSpawner
 from ..entities.obstacles.palm_spawner import PalmSpawner
 from ..entities.track import Track
@@ -41,10 +42,11 @@ class GameView(arcade.View):
         self.gallop_sound = None
         self.gallop_player = None
 
-        # Инициализируем создатели животных и препятствий
+        # Инициализируем охотника и создателей животных и препятствий
         self.palm_spawner = None
         self.rhino_spawner = None
         self.barrier_spawner = None
+        self.hunter_sprite = None
 
         self.setup()
         self.start()
@@ -70,29 +72,37 @@ class GameView(arcade.View):
                 track = Track(track_index=i + 1, x=x, y=y)
                 self.scene["Tracks"].append(track)
 
-            # 3. Пальмы (ДО эффектов и рамки)
-            self.scene.add_sprite_list("PalmObstacles", use_spatial_hash=True)
+            # 3. Пальмы
+            self.scene.add_sprite_list("PalmObstacles")
             self.palm_spawner = PalmSpawner(self.scene["PalmObstacles"])
 
             # 4. Барьеры на пятой дорожке
-            self.scene.add_sprite_list("BarrierObstacles", use_spatial_hash=True)
+            self.scene.add_sprite_list("BarrierObstacles")
             self.barrier_spawner = BarrierSpawner(self.scene["BarrierObstacles"])
 
-            # 5. Носороги (на первой дорожке)
-            self.scene.add_sprite_list("RhinoAnimals", use_spatial_hash=True)
+            # 5. Носороги на первой дорожке
+            self.scene.add_sprite_list("RhinoAnimals")
             self.rhino_spawner = RhinoSpawner(self.scene["RhinoAnimals"])
 
-            # 6. Блик (поверх дорожек)
+            # 6. Создаем и добавляем охотника
+            self.hunter_sprite = Hunter()
+            self.hunter_sprite.setup()
+
+            self.scene.add_sprite_list("Hunter", sprite_list=arcade.SpriteList())
+            self.scene["Hunter"].append(self.hunter_sprite)
+            self.hunter_sprite.run()
+
+            # 7. Блик (поверх дорожек)
             glare_sprite = arcade.Sprite(GLARE_EFFECT, center_x=SCREEN_CENTER[0], center_y=SCREEN_CENTER[1])
             self.scene.add_sprite_list("Effects")
             self.scene["Effects"].append(glare_sprite)
 
-            # 7. Рамка автомата (самый верхний слой)
+            # 8. Рамка автомата (самый верхний слой)
             frame_sprite = arcade.Sprite(SLOT_MACHINE_FRAME, center_x=SCREEN_CENTER[0], center_y=SCREEN_CENTER[1])
             self.scene.add_sprite_list("Frame")
             self.scene["Frame"].append(frame_sprite)
 
-            # Загрузка звука галопа
+            # 9. Загрузка звука галопа
             try:
                 self.gallop_sound = arcade.Sound(GALLOP_SOUND_PATH)
                 self.gallop_player = self.gallop_sound.play(loop=True)
@@ -115,6 +125,10 @@ class GameView(arcade.View):
             self.rhino_spawner.update(delta_time, self)
         if self.barrier_spawner:
             self.barrier_spawner.update(delta_time)
+
+        # Обновляем охотника
+        if self.hunter_sprite:
+            self.hunter_sprite.on_update(delta_time)
 
     def on_draw(self):
         self.clear()

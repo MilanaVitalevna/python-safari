@@ -17,7 +17,7 @@ class RhinoSpawner:
     """
 
     def __init__(self, sprite_list: arcade.SpriteList):
-        self.time_since_last_spawn = 0
+        self.time_since_last_spawn = 0.0
         self.spawn_interval = self._get_random_interval()
         self.active_rhinos: list[Rhino] = []
         self.sprite_list = sprite_list
@@ -26,7 +26,7 @@ class RhinoSpawner:
     def _get_random_interval(self) -> float:
         """Случайный интервал от 13 до 19.5 секунд."""
         interval = random.uniform(  # noqa: S311 # nosec
-            RHINO_SPAWN_INTERVAL_MIN / 1000,
+            RHINO_SPAWN_INTERVAL_MIN / 1000,  # Конвертируем в секунды
             RHINO_SPAWN_INTERVAL_MAX / 1000,
         )
         return interval
@@ -34,7 +34,7 @@ class RhinoSpawner:
     def start(self):
         """Создаёт первый носорог при старте игры."""
         self._spawn_rhino()
-        self.time_since_last_spawn = 0
+        self.time_since_last_spawn = 0.0
         self.spawn_interval = self._get_random_interval()
 
     def update(self, delta_time: float, scene):
@@ -48,7 +48,7 @@ class RhinoSpawner:
         # Проверяем интервал
         if self.time_since_last_spawn >= self.spawn_interval:
             self._spawn_rhino()
-            self.time_since_last_spawn = 0
+            self.time_since_last_spawn = 0.0
             self.spawn_interval = self._get_random_interval()
 
         # Обновляем и удаляем старых носорогов
@@ -57,6 +57,7 @@ class RhinoSpawner:
     def _spawn_rhino(self):
         """Создаёт нового носорога."""
         rhino = Rhino()
+        rhino.setup()  # Явно вызываем setup для загрузки текстур
         self.number += 1
 
         self.active_rhinos.append(rhino)

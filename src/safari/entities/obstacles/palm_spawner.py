@@ -13,19 +13,22 @@ class PalmSpawner:
     """
 
     def __init__(self, sprite_list: arcade.SpriteList):
-        self.time_since_last_spawn = 0
+        self.time_since_last_spawn = 0.0
         self.spawn_interval = self._get_random_interval()
         self.active_palms: list[Palm] = []
         self.sprite_list = sprite_list
 
         # Сразу создаем первую пальму при инициализации
         self._spawn_palm()
-        self.time_since_last_spawn = 0  # Сбрасываем таймер
+        self.time_since_last_spawn = 0.0  # Сбрасываем таймер
         self.spawn_interval = self._get_random_interval()  # Генерируем новый интервал
 
     def _get_random_interval(self) -> float:
-        """Случайный интервал от 4 до 6 секунд (целые значения)."""
-        interval = random.uniform(PALM_SPAWN_INTERVAL_MIN / 1000, PALM_SPAWN_INTERVAL_MAX / 1000)  # noqa: S311 # nosec
+        """Случайный интервал от 4 до 6 секунд."""
+        interval = random.uniform(  # noqa: S311 # nosec
+            PALM_SPAWN_INTERVAL_MIN / 1000,  # Конвертируем в секунды
+            PALM_SPAWN_INTERVAL_MAX / 1000,
+        )
         return interval
 
     def update(self, delta_time: float):
@@ -35,7 +38,7 @@ class PalmSpawner:
         # Проверяем интервал
         if self.time_since_last_spawn >= self.spawn_interval:
             self._spawn_palm()
-            self.time_since_last_spawn = 0
+            self.time_since_last_spawn = 0.0
             self.spawn_interval = self._get_random_interval()
 
         # Обновляем и удаляем старые пальмы
@@ -44,6 +47,7 @@ class PalmSpawner:
     def _spawn_palm(self):
         """Создаёт новую пальму."""
         palm = Palm()
+        palm.setup()  # Явно вызываем setup для загрузки текстур
 
         self.active_palms.append(palm)
         self.sprite_list.append(palm)

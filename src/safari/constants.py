@@ -70,7 +70,7 @@ PALM_DESPAWN_X = GAME_FIELD_LEFT - 30
 PALM_Y_OFFSET = 20  # Y-сдвиг для пальм
 
 PALM_SPEED = 50  # пикселей в секунду
-PALM_SPAWN_INTERVAL_MIN = 4000  # милисекунды
+PALM_SPAWN_INTERVAL_MIN = 3000  # милисекунды
 PALM_SPAWN_INTERVAL_MAX = 6000  # милисекунды
 PALM_ALIVE_SPRITE = ":slot_machine:/images/obstacles/palm_alive.png"
 PALM_DEAD_SPRITE = ":slot_machine:/images/obstacles/palm_dead.png"
@@ -89,9 +89,24 @@ RHINO_1_SPRITE = ":slot_machine:/images/animals/rhino/run_1.png"
 RHINO_2_SPRITE = ":slot_machine:/images/animals/rhino/run_2.png"
 RHINO_3_SPRITE = ":slot_machine:/images/animals/rhino/run_3.png"
 
-# Константы для 5 дорожки (барьер)
-TRACK_INDEX_BARRIER = 4  # 5-я дорожка (индекс 4)
-TRACK_Y_BARRIER = TRACK_POSITIONS[TRACK_INDEX_BARRIER][1]
+# Константы для 5 дорожки (охотник и препятствия)
+HUNTER_TRACK_INDEX = 4  # 5-я дорожка (индекс 4)
+
+# Константы для охотника
+HUNTER_START_X = GAME_FIELD_LEFT + 20
+HUNTER_Y_OFFSET = 12  # Y-сдвиг для охотника
+HUNTER_Y = TRACK_POSITIONS[HUNTER_TRACK_INDEX][1] + HUNTER_Y_OFFSET
+
+HUNTER_SPEED = 3.333  # пикселей в секунду
+HUNTER_JUMP_DURATION = 600  # милисекунды
+HUNTER_ANIMATION_SPEED = 120  # милисекунды
+HUNTER_1_SPRITE = ":slot_machine:/images/hunter/run_1.png"
+HUNTER_2_SPRITE = ":slot_machine:/images/hunter/run_2.png"
+HUNTER_3_SPRITE = ":slot_machine:/images/hunter/run_3.png"
+HUNTER_JUMP_SPRITE = ":slot_machine:/images/hunter/jump.png"
+
+# Константы для барьера
+TRACK_Y_BARRIER = TRACK_POSITIONS[HUNTER_TRACK_INDEX][1]
 BARRIER_SPAWN_X = GAME_FIELD_RIGHT
 BARRIER_DESPAWN_X = GAME_FIELD_LEFT - 30
 BARRIER_Y_OFFSET = 3  # Y-сдвиг для барьера

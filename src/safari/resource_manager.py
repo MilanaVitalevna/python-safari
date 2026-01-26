@@ -8,8 +8,13 @@ import arcade
 
 from .constants import (
     AVENTURA_FONT_PATH,
-    BARRIER_SPRITE,
     # Текстуры препятствий
+    BARRIER_SPRITE,
+    # Текстуры охотника
+    HUNTER_1_SPRITE,
+    HUNTER_2_SPRITE,
+    HUNTER_3_SPRITE,
+    HUNTER_JUMP_SPRITE,
     PALM_ALIVE_SPRITE,
     PALM_DEAD_SPRITE,
     RESOURCES_PATH,
@@ -36,6 +41,9 @@ class Textures:
 
     # Текстура барьера
     barrier: arcade.Texture = None
+
+    # Текстуры охотника
+    hunter: list[arcade.Texture] = field(default_factory=list)
 
 
 def load_fonts():
@@ -88,6 +96,19 @@ def load_textures():
             print("⚠️ BARRIER_SPRITE не определен")
     except Exception as e:
         print(f"❌ Ошибка загрузки текстуры барьера: {e}")
+
+    # Загружаем текстуры охотника
+    try:
+        Textures.hunter = [
+            arcade.load_texture(HUNTER_1_SPRITE),
+            arcade.load_texture(HUNTER_2_SPRITE),
+            arcade.load_texture(HUNTER_3_SPRITE),
+            arcade.load_texture(HUNTER_JUMP_SPRITE),
+        ]
+        print(f"✅ Загружены {len(Textures.hunter)} текстур охотника")
+    except Exception as e:
+        print(f"❌ Ошибка загрузки текстур охотника: {e}")
+        Textures.hunter = []
 
     print("🎨 Загрузка текстур завершена")
 
