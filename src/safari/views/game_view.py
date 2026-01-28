@@ -23,6 +23,7 @@ from ..constants import (
     TV_BACKGROUND,
 )
 from ..entities.animals.rhino.rhino_spawner import RhinoSpawner
+from ..entities.bullet.bullet_manager import BulletManager
 from ..entities.hunter.hunter import Hunter
 from ..entities.obstacles.barrier_spawner import BarrierSpawner
 from ..entities.obstacles.palm_spawner import PalmSpawner
@@ -42,11 +43,12 @@ class GameView(arcade.View):
         self.gallop_sound = None
         self.gallop_player = None
 
-        # Инициализируем охотника и создателей животных и препятствий
+        # Инициализируем охотника, пули и создателей животных с препятствиями
         self.palm_spawner = None
         self.rhino_spawner = None
         self.barrier_spawner = None
         self.hunter_sprite = None
+        self.bullet_manager = None
 
         self.setup()
         self.start()
@@ -92,17 +94,23 @@ class GameView(arcade.View):
             self.scene["Hunter"].append(self.hunter_sprite)
             self.hunter_sprite.run()
 
-            # 7. Блик (поверх дорожек)
+            # 7. Инициализация менеджера пуль
+            self.bullet_manager = BulletManager()
+            self.bullet_manager.setup(self.hunter_sprite)
+            self.scene.add_sprite_list("Bullets", sprite_list=self.bullet_manager.sprite_list)
+            self.bullet_manager.enable_shooting()  # Разрешаем стрельбу
+
+            # 8. Блик (поверх дорожек)
             glare_sprite = arcade.Sprite(GLARE_EFFECT, center_x=SCREEN_CENTER[0], center_y=SCREEN_CENTER[1])
             self.scene.add_sprite_list("Effects")
             self.scene["Effects"].append(glare_sprite)
 
-            # 8. Рамка автомата (самый верхний слой)
+            # 9. Рамка автомата (самый верхний слой)
             frame_sprite = arcade.Sprite(SLOT_MACHINE_FRAME, center_x=SCREEN_CENTER[0], center_y=SCREEN_CENTER[1])
             self.scene.add_sprite_list("Frame")
             self.scene["Frame"].append(frame_sprite)
 
-            # 9. Загрузка звука галопа
+            # 10. Загрузка звука галопа
             try:
                 self.gallop_sound = arcade.Sound(GALLOP_SOUND_PATH)
                 self.gallop_player = self.gallop_sound.play(loop=True)
@@ -134,6 +142,9 @@ class GameView(arcade.View):
         if self.hunter_sprite:
             self.hunter_sprite.on_update(delta_time)
 
+        if self.bullet_manager:
+            self.bullet_manager.update(delta_time)
+
     def on_draw(self):
         self.clear()
 
@@ -145,3 +156,6 @@ class GameView(arcade.View):
             if self.gallop_player:
                 self.gallop_player.pause()
             arcade.exit()
+
+        if key == arcade.key.SPACE and self.bullet_manager:
+            self.bullet_manager.fire()

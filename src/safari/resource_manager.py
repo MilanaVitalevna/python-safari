@@ -8,9 +8,9 @@ import arcade
 
 from .constants import (
     AVENTURA_FONT_PATH,
-    # Текстуры препятствий
     BARRIER_SPRITE,
-    # Текстуры охотника
+    BULLET_SPRITE_PATH,
+    FIRE_SOUND_PATH,
     HUNTER_1_SPRITE,
     HUNTER_2_SPRITE,
     HUNTER_3_SPRITE,
@@ -19,11 +19,11 @@ from .constants import (
     PALM_DEAD_SPRITE,
     RESOURCES_PATH,
     RESOURCES_PREFIX,
-    # Текстуры носорога
     RHINO_1_SPRITE,
     RHINO_2_SPRITE,
     RHINO_3_SPRITE,
     SAFARI_FONT_PATH,
+    SHOT_SOUND_PATH,
 )
 
 
@@ -44,6 +44,13 @@ class Textures:
 
     # Текстуры охотника
     hunter: list[arcade.Texture] = field(default_factory=list)
+
+    # Текстура пули
+    bullet: arcade.Texture = None
+
+    # Звуки
+    fire_sound: arcade.Sound = None
+    shot_sound: arcade.Sound = None
 
 
 def load_fonts():
@@ -109,6 +116,28 @@ def load_textures():
     except Exception as e:
         print(f"❌ Ошибка загрузки текстур охотника: {e}")
         Textures.hunter = []
+
+    # Загружаем текстуру пули
+    try:
+        Textures.bullet = arcade.load_texture(BULLET_SPRITE_PATH)
+        print("✅ Загружена текстура пули")
+    except Exception as e:
+        print(f"❌ Ошибка загрузки текстуры пули: {e}")
+
+    # Загружаем звуки для стрельбы
+    try:
+        if FIRE_SOUND_PATH.exists():
+            Textures.fire_sound = arcade.load_sound(FIRE_SOUND_PATH)
+            print("✅ Загружен звук выстрела")
+    except Exception as e:
+        print(f"❌ Ошибка загрузки звука выстрела: {e}")
+
+    try:
+        if SHOT_SOUND_PATH.exists():
+            Textures.shot_sound = arcade.load_sound(SHOT_SOUND_PATH)
+            print("✅ Загружен звук попадания")
+    except Exception as e:
+        print(f"❌ Ошибка загрузки звука попадания: {e}")
 
     print("🎨 Загрузка текстур завершена")
 

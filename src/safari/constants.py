@@ -78,7 +78,7 @@ PALM_DEAD_SPRITE = ":slot_machine:/images/obstacles/palm_dead.png"
 # Константы для 1 дорожки (носороги)
 TRACK_INDEX_RHINO = 0  # 1-я дорожка (индекс 0)
 TRACK_Y_RHINO = TRACK_POSITIONS[TRACK_INDEX_RHINO][1]
-RHINO_SPAWN_X = GAME_FIELD_RIGHT - 30
+RHINO_SPAWN_X = GAME_FIELD_RIGHT + 30
 RHINO_DESPAWN_X = GAME_FIELD_LEFT
 RHINO_Y_OFFSET = 20  # Y-сдвиг для носорогов
 
@@ -117,3 +117,24 @@ BARRIER_SPEED = 50  # пикселей в секунду
 BARRIER_SPAWN_INTERVAL_MIN = 2000  # милисекунды
 BARRIER_SPAWN_INTERVAL_MAX = 4000  # милисекунды
 BARRIER_SPRITE = ":slot_machine:/images/obstacles/barrier.png"
+
+# Константы для пули
+BULLET_SPRITE_PATH = ":slot_machine:/images/bullet/bullet.png"
+BULLET_SPEED_X = 100  # пикселей в секунду
+BULLET_SPEED_Y = 100  # пикселей в секунду
+BULLET_MAX_X = 830  # правый край для удаления
+BULLET_MIN_Y = 85  # нижний край для удаления
+BULLET_START_OFFSET_X = 25  # смещение от позиции охотника по X
+BULLET_START_OFFSET_Y = 10  # смещение от позиции охотника по Y
+# Ограничения
+MIN_TIME_SINCE_LAST_SHOT = 1.0  # Минимальная задержка между выстрелами
+MAX_SHOTS_TOTAL = 16  # Максимум 16 выстрелов за игру
+
+# Зоны попадания
+HIT_ZONE_LARGE = 30  # Носорог/Бык
+HIT_ZONE_SMALL = 20  # Газель/Пальма
+HIT_ZONE_HEIGHT = 7
+
+# Звуки
+FIRE_SOUND_PATH = SOUNDS_PATH / "fire.ogg"
+SHOT_SOUND_PATH = SOUNDS_PATH / "shot.ogg"
