@@ -2,7 +2,9 @@ import arcade
 
 from src.safari.constants import (
     HUNTER_ANIMATION_SPEED,
+    HUNTER_JUMP_DETECTION_DISTANCE,
     HUNTER_JUMP_DURATION,
+    HUNTER_JUMP_Y_OFFSET,
     HUNTER_SPEED,
     HUNTER_START_X,
     HUNTER_Y,
@@ -90,15 +92,31 @@ class Hunter(arcade.Sprite):
         if not self.is_jumping:
             self.is_jumping = True
             self.jump_timer = 0.0
+            self.center_y = HUNTER_Y + HUNTER_JUMP_Y_OFFSET
             self.texture = self.jump_texture
 
     def _end_jump(self):
         """Завершает прыжок и возвращает к бегу."""
         self.is_jumping = False
         self.run_frame = 0
+        self.center_y = HUNTER_Y
         self.texture = self.run_textures[0]
         self.run_frame_timer = 0.0
 
     def run(self):
         """Явный переход к анимации бега."""
         self._end_jump()
+
+    def check_for_obstacles(self, barriers):
+        """
+        Упрощенная проверка препятствий.
+        Проверяет каждый кадр, без таймеров.
+        """
+        if self.is_jumping:
+            return
+
+        for barrier in barriers:
+            # Проверяем на препятствие впереди
+            if barrier.center_x - self.center_x < HUNTER_JUMP_DETECTION_DISTANCE and barrier.center_x > self.center_x:
+                self.jump()
+                return

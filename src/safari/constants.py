@@ -96,9 +96,11 @@ HUNTER_TRACK_INDEX = 4  # 5-я дорожка (индекс 4)
 HUNTER_START_X = GAME_FIELD_LEFT + 20
 HUNTER_Y_OFFSET = 12  # Y-сдвиг для охотника
 HUNTER_Y = TRACK_POSITIONS[HUNTER_TRACK_INDEX][1] + HUNTER_Y_OFFSET
+HUNTER_JUMP_DETECTION_DISTANCE = 23  # пикселей
+HUNTER_JUMP_Y_OFFSET = 7  # пикселей (визуальное смещение вверх)
 
-HUNTER_SPEED = 3.333  # пикселей в секунду
-HUNTER_JUMP_DURATION = 600  # милисекунды
+HUNTER_SPEED = 2.5  # пикселей в секунду
+HUNTER_JUMP_DURATION = 900  # милисекунды
 HUNTER_ANIMATION_SPEED = 120  # милисекунды
 HUNTER_1_SPRITE = ":slot_machine:/images/hunter/run_1.png"
 HUNTER_2_SPRITE = ":slot_machine:/images/hunter/run_2.png"

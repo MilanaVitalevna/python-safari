@@ -127,6 +127,10 @@ class GameView(arcade.View):
             self.barrier_spawner.update(delta_time)
 
         # Обновляем охотника
+        if self.hunter_sprite and "BarrierObstacles" in self.scene:
+            # Простая проверка каждый кадр
+            self.hunter_sprite.check_for_obstacles(self.scene["BarrierObstacles"])
+
         if self.hunter_sprite:
             self.hunter_sprite.on_update(delta_time)
 
