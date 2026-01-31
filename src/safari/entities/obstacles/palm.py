@@ -5,6 +5,7 @@ from src.safari.constants import (
     PALM_SPAWN_X,
     PALM_SPEED,
     PALM_Y_OFFSET,
+    PALMDEAD_Y_OFFSET,
     TRACK_Y_PALM,
 )
 from src.safari.resource_manager import Textures
@@ -82,6 +83,7 @@ class Palm(arcade.Sprite):
             return
 
         self.texture = self.dead_texture
+        self.center_y = TRACK_Y_PALM + PALMDEAD_Y_OFFSET
         self.is_alive = False
 
     def should_be_removed(self) -> bool:

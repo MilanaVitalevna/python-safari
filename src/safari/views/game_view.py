@@ -14,6 +14,7 @@
 
 import arcade
 
+from ..collision.collision_system import CollisionSystem
 from ..constants import (
     GALLOP_SOUND_PATH,
     GLARE_EFFECT,
@@ -50,6 +51,10 @@ class GameView(arcade.View):
         self.hunter_sprite = None
         self.bullet_manager = None
 
+        # Сначала создаем систему столкновений
+        self.collision_system = CollisionSystem()
+
+        # Потом настраиваем игру
         self.setup()
         self.start()
 
@@ -117,33 +122,45 @@ class GameView(arcade.View):
             except Exception as e:
                 print(f"❌ Ошибка загрузки звука галопа: {e}")
 
+            # 11. Настраиваем систему столкновений
+            if self.collision_system:
+                self.collision_system.setup(
+                    bullet_manager=self.bullet_manager, rhino_spawner=self.rhino_spawner, palm_spawner=self.palm_spawner
+                )
+            else:
+                print("⚠️ collision_system не инициализирован!")
+
         except Exception as e:
             print(f"❌ Ошибка загрузки фона в GameView: {e}")
 
     def on_update(self, delta_time: float):
         """Обновление анимаций."""
-        self.scene["Tracks"].update()  # Вызываем update только у TrackSprite
+        # 1. Обновляем дорожки
+        self.scene["Tracks"].update()
         for track in self.scene["Tracks"]:
             track.on_update(delta_time)
 
-        # Обновляем создателей
+        # 2. Обновляем создателей
         if self.palm_spawner:
             self.palm_spawner.update(delta_time)
         if self.rhino_spawner:
-            self.rhino_spawner.update(delta_time, self)
+            self.rhino_spawner.update(delta_time)
         if self.barrier_spawner:
             self.barrier_spawner.update(delta_time)
 
-        # Обновляем охотника
+        # 3. Обновляем охотника
         if self.hunter_sprite and "BarrierObstacles" in self.scene:
-            # Простая проверка каждый кадр
             self.hunter_sprite.check_for_obstacles(self.scene["BarrierObstacles"])
 
         if self.hunter_sprite:
             self.hunter_sprite.on_update(delta_time)
 
+        # 4. Обновляем пули
         if self.bullet_manager:
             self.bullet_manager.update(delta_time)
+
+        # 5. Проверяем столкновения пуль с объектами
+        self.collision_system.update()
 
     def on_draw(self):
         self.clear()

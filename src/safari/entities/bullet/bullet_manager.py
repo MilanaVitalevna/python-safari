@@ -161,12 +161,3 @@ class BulletManager:
         self.shots_fired = 0
         self.game_started = False
         print("🔄 Менеджер пуль сброшен")
-
-    # Методы для столкновений (заглушки на будущее)
-    def check_rhino_collisions(self, rhino_list: arcade.SpriteList):
-        """Проверяет столкновения с носорогами."""
-        pass
-
-    def check_palm_collisions(self, palm_list: arcade.SpriteList):
-        """Проверяет столкновения с пальмами."""
-        pass

@@ -97,4 +97,5 @@ class Rhino(arcade.Sprite):
 
     def should_be_removed(self) -> bool:
         """Проверка, нужно ли удалять объект."""
-        return self.center_x <= RHINO_DESPAWN_X
+        # Удаляем если вышел за границу ИЛИ убит
+        return self.center_x <= RHINO_DESPAWN_X or not self.is_alive

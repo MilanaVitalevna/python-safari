@@ -68,6 +68,7 @@ TRACK_Y_PALM = TRACK_POSITIONS[TRACK_INDEX_PALM][1]
 PALM_SPAWN_X = GAME_FIELD_RIGHT
 PALM_DESPAWN_X = GAME_FIELD_LEFT - 30
 PALM_Y_OFFSET = 20  # Y-сдвиг для пальм
+PALMDEAD_Y_OFFSET = 12  # Y-сдвиг для сбитых пальм
 
 PALM_SPEED = 50  # пикселей в секунду
 PALM_SPAWN_INTERVAL_MIN = 3000  # милисекунды
@@ -129,11 +130,6 @@ BULLET_START_OFFSET_Y = 10  # смещение от позиции охотни�
 # Ограничения
 MIN_TIME_SINCE_LAST_SHOT = 1.0  # Минимальная задержка между выстрелами
 MAX_SHOTS_TOTAL = 16  # Максимум 16 выстрелов за игру
-
-# Зоны попадания
-HIT_ZONE_LARGE = 30  # Носорог/Бык
-HIT_ZONE_SMALL = 20  # Газель/Пальма
-HIT_ZONE_HEIGHT = 7
 
 # Звуки
 FIRE_SOUND_PATH = SOUNDS_PATH / "fire.ogg"

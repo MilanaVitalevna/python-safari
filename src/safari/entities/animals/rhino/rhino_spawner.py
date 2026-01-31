@@ -19,9 +19,10 @@ class RhinoSpawner:
     def __init__(self, sprite_list: arcade.SpriteList):
         self.time_since_last_spawn = 0.0
         self.spawn_interval = self._get_random_interval()
-        self.active_rhinos: list[Rhino] = []
+        self.active_rhinos = arcade.SpriteList()
         self.sprite_list = sprite_list
         self.number = 0  # Счётчик созданных носорогов
+        # self.has_been_hit = False  # Добавляем флаг состояния
 
     def _get_random_interval(self) -> float:
         """Случайный интервал от 13 до 19.5 секунд."""
@@ -37,13 +38,13 @@ class RhinoSpawner:
         self.time_since_last_spawn = 0.0
         self.spawn_interval = self._get_random_interval()
 
-    def update(self, delta_time: float, scene):
+    def update(self, delta_time: float):
         """Проверяет, нужно ли создать нового носорога."""
         self.time_since_last_spawn += delta_time
 
-        # Проверяем, был ли уже попадание в носорога
-        if self.number == 0 and scene.scene.rhinoCount > 0:
-            return
+        # # Проверяем, был ли уже попадание в носорога
+        # if self.has_been_hit:
+        #     return
 
         # Проверяем интервал
         if self.time_since_last_spawn >= self.spawn_interval:
@@ -70,10 +71,13 @@ class RhinoSpawner:
         for rhino in self.active_rhinos:
             rhino.on_update(delta_time)
 
-            if rhino.should_be_removed():
+            # Удаляем носорога если:
+            # 1. Он вышел за левую границу ИЛИ
+            # 2. В него попали (is_alive = False)
+            if rhino.should_be_removed() or not rhino.is_alive:
                 rhinos_to_remove.append(rhino)
 
-        # Удаляем помеченные носороги
+        # Удаляем помеченных носорогов
         for rhino in rhinos_to_remove:
             self.active_rhinos.remove(rhino)
             self.sprite_list.remove(rhino)

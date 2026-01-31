@@ -15,7 +15,7 @@ class PalmSpawner:
     def __init__(self, sprite_list: arcade.SpriteList):
         self.time_since_last_spawn = 0.0
         self.spawn_interval = self._get_random_interval()
-        self.active_palms: list[Palm] = []
+        self.active_palms = arcade.SpriteList()
         self.sprite_list = sprite_list
 
         # Сразу создаем первую пальму при инициализации
@@ -59,6 +59,7 @@ class PalmSpawner:
         for palm in self.active_palms:
             palm.on_update(delta_time)
 
+            # Удаляем пальму, только если она вышла за левую границу
             if palm.should_be_removed():
                 palms_to_remove.append(palm)
 
