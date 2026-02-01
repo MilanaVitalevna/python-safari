@@ -23,6 +23,7 @@ from ..constants import (
     TRACK_POSITIONS,
     TV_BACKGROUND,
 )
+from ..entities.animals.bizon.bizon_spawner import BizonSpawner
 from ..entities.animals.rhino.rhino_spawner import RhinoSpawner
 from ..entities.bullet.bullet_manager import BulletManager
 from ..entities.hunter.hunter import Hunter
@@ -47,6 +48,7 @@ class GameView(arcade.View):
         # Инициализируем охотника, пули и создателей животных с препятствиями
         self.palm_spawner = None
         self.rhino_spawner = None
+        self.bizon_spawner = None
         self.barrier_spawner = None
         self.hunter_sprite = None
         self.bullet_manager = None
@@ -62,6 +64,8 @@ class GameView(arcade.View):
         """Запускает основные процессы игры."""
         if self.rhino_spawner:
             self.rhino_spawner.start()
+        if self.bizon_spawner:
+            self.bizon_spawner.start()
         if self.barrier_spawner:
             self.barrier_spawner._spawn_barrier()
 
@@ -90,6 +94,10 @@ class GameView(arcade.View):
             # 5. Носороги на первой дорожке
             self.scene.add_sprite_list("RhinoAnimals")
             self.rhino_spawner = RhinoSpawner(self.scene["RhinoAnimals"])
+
+            # 6. Бизоны на второй дорожке
+            self.scene.add_sprite_list("BizonAnimals")
+            self.bizon_spawner = BizonSpawner(self.scene["BizonAnimals"])
 
             # 6. Создаем и добавляем охотника
             self.hunter_sprite = Hunter()
@@ -125,7 +133,11 @@ class GameView(arcade.View):
             # 11. Настраиваем систему столкновений
             if self.collision_system:
                 self.collision_system.setup(
-                    bullet_manager=self.bullet_manager, rhino_spawner=self.rhino_spawner, palm_spawner=self.palm_spawner
+                    bullet_manager=self.bullet_manager,
+                    rhino_spawner=self.rhino_spawner,
+                    bizon_spawner=self.bizon_spawner,
+                    # gazelle_spawner=self.gazelle_spawner,
+                    palm_spawner=self.palm_spawner,
                 )
             else:
                 print("⚠️ collision_system не инициализирован!")
@@ -145,6 +157,8 @@ class GameView(arcade.View):
             self.palm_spawner.update(delta_time)
         if self.rhino_spawner:
             self.rhino_spawner.update(delta_time)
+        if self.bizon_spawner:
+            self.bizon_spawner.update(delta_time)
         if self.barrier_spawner:
             self.barrier_spawner.update(delta_time)
 

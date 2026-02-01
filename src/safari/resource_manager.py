@@ -9,6 +9,9 @@ import arcade
 from .constants import (
     AVENTURA_FONT_PATH,
     BARRIER_SPRITE,
+    BIZON_1_SPRITE,
+    BIZON_2_SPRITE,
+    BIZON_3_SPRITE,
     BULLET_SPRITE_PATH,
     FIRE_SOUND_PATH,
     HUNTER_1_SPRITE,
@@ -85,6 +88,18 @@ def load_textures():
     except Exception as e:
         print(f"❌ Ошибка загрузки текстур носорога: {e}")
         Textures.rhino = []
+
+    # Загружаем текстуры бизона
+    try:
+        Textures.bizon = [
+            arcade.load_texture(BIZON_1_SPRITE),
+            arcade.load_texture(BIZON_2_SPRITE),
+            arcade.load_texture(BIZON_3_SPRITE),
+        ]
+        print(f"✅ Загружены {len(Textures.bizon)} текстур бизона")
+    except Exception as e:
+        print(f"❌ Ошибка загрузки текстур бизона: {e}")
+        Textures.bizon = []
 
     # Загружаем текстуры пальмы
     try:

@@ -51,7 +51,7 @@ GAME_FIELD_RIGHT = 798  # Правая граница
 # Координаты дорожек
 TRACK_POSITIONS = [
     (GAME_FIELD_LEFT, 609),  # Дорожка 1: носорог ← ВЕРХ ЭКРАНА
-    (GAME_FIELD_LEFT, 533),  # Дорожка 2: быки
+    (GAME_FIELD_LEFT, 533),  # Дорожка 2: бизоны
     (GAME_FIELD_LEFT, 459),  # Дорожка 3: газели
     (GAME_FIELD_LEFT, 325),  # Дорожка 4: пальмы
     (GAME_FIELD_LEFT, 258),  # Дорожка 5: охотник ← НИЗ ЭКРАНА
@@ -89,6 +89,20 @@ RHINO_SPAWN_INTERVAL_MAX = 19500  # милисекунды
 RHINO_1_SPRITE = ":slot_machine:/images/animals/rhino/run_1.png"
 RHINO_2_SPRITE = ":slot_machine:/images/animals/rhino/run_2.png"
 RHINO_3_SPRITE = ":slot_machine:/images/animals/rhino/run_3.png"
+
+# Константы для 2 дорожки (бизоны)
+TRACK_INDEX_BIZON = 1  # 2-я дорожка (индекс 1)
+TRACK_Y_BIZON = TRACK_POSITIONS[TRACK_INDEX_BIZON][1]
+BIZON_SPAWN_X = GAME_FIELD_RIGHT + 30
+BIZON_DESPAWN_X = GAME_FIELD_LEFT
+BIZON_Y_OFFSET = 20  # Y-сдвиг для бизонов
+
+BIZON_SPEED = 33  # пикселей в секунду
+BIZON_SPAWN_INTERVAL_MIN = 4000  # милисекунды
+BIZON_SPAWN_INTERVAL_MAX = 6000  # милисекунды
+BIZON_1_SPRITE = ":slot_machine:/images/animals/bizon/run_1.png"
+BIZON_2_SPRITE = ":slot_machine:/images/animals/bizon/run_2.png"
+BIZON_3_SPRITE = ":slot_machine:/images/animals/bizon/run_3.png"
 
 # Константы для 5 дорожки (охотник и препятствия)
 HUNTER_TRACK_INDEX = 4  # 5-я дорожка (индекс 4)
