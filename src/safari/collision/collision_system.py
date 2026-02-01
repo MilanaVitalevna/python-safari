@@ -14,13 +14,14 @@ class CollisionSystem:
         self.bullet_manager = None
         self.rhino_spawner = None
         self.bizon_spawner = None
+        self.gazelle_spawner = None
         self.palm_spawner = None
         # Для будущих типов можно добавить здесь
 
         # Список пар "пули-цели" для проверки
         self.collision_pairs = []
 
-    def setup(self, bullet_manager, rhino_spawner, bizon_spawner, palm_spawner):
+    def setup(self, bullet_manager, rhino_spawner, bizon_spawner, gazelle_spawner, palm_spawner):
         """
         Настройка системы столкновений.
 
@@ -28,18 +29,20 @@ class CollisionSystem:
             bullet_manager: менеджер пуль
             rhino_spawner: создатель носорогов
             bizon_spawner: создатель бизонов
+            gazelle_spawner: создатель газелей
             palm_spawner: создатель пальм
         """
         self.bullet_manager = bullet_manager
         self.rhino_spawner = rhino_spawner
         self.bizon_spawner = bizon_spawner
+        self.gazelle_spawner = gazelle_spawner
         self.palm_spawner = palm_spawner
 
         # Определяем какие типы объектов проверять на столкновения
         self.collision_pairs = [
             (rhino_spawner.active_rhinos, "rhino"),
             (bizon_spawner.active_bizons, "bizon"),
-            # (gazelle_spawner.active_rhinos, "gazelle"),
+            (gazelle_spawner.active_gazelles, "gazelle"),
             (palm_spawner.active_palms, "palm"),
         ]
 

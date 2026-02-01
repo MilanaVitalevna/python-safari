@@ -24,6 +24,7 @@ from ..constants import (
     TV_BACKGROUND,
 )
 from ..entities.animals.bizon.bizon_spawner import BizonSpawner
+from ..entities.animals.gazelle.bizon_spawner import GazelleSpawner
 from ..entities.animals.rhino.rhino_spawner import RhinoSpawner
 from ..entities.bullet.bullet_manager import BulletManager
 from ..entities.hunter.hunter import Hunter
@@ -49,6 +50,7 @@ class GameView(arcade.View):
         self.palm_spawner = None
         self.rhino_spawner = None
         self.bizon_spawner = None
+        self.gazelle_spawner = None
         self.barrier_spawner = None
         self.hunter_sprite = None
         self.bullet_manager = None
@@ -66,6 +68,8 @@ class GameView(arcade.View):
             self.rhino_spawner.start()
         if self.bizon_spawner:
             self.bizon_spawner.start()
+        if self.gazelle_spawner:
+            self.gazelle_spawner.start()
         if self.barrier_spawner:
             self.barrier_spawner._spawn_barrier()
 
@@ -83,23 +87,27 @@ class GameView(arcade.View):
                 track = Track(track_index=i + 1, x=x, y=y)
                 self.scene["Tracks"].append(track)
 
-            # 3. Пальмы
-            self.scene.add_sprite_list("PalmObstacles")
-            self.palm_spawner = PalmSpawner(self.scene["PalmObstacles"])
-
-            # 4. Барьеры на пятой дорожке
+            # 3. Барьеры на пятой дорожке
             self.scene.add_sprite_list("BarrierObstacles")
             self.barrier_spawner = BarrierSpawner(self.scene["BarrierObstacles"])
 
-            # 5. Носороги на первой дорожке
+            # 4. Носороги на первой дорожке
             self.scene.add_sprite_list("RhinoAnimals")
             self.rhino_spawner = RhinoSpawner(self.scene["RhinoAnimals"])
 
-            # 6. Бизоны на второй дорожке
+            # 5. Бизоны на второй дорожке
             self.scene.add_sprite_list("BizonAnimals")
             self.bizon_spawner = BizonSpawner(self.scene["BizonAnimals"])
 
-            # 6. Создаем и добавляем охотника
+            # 6. Газели на третьей дорожке
+            self.scene.add_sprite_list("GazelleAnimals")
+            self.gazelle_spawner = GazelleSpawner(self.scene["GazelleAnimals"])
+
+            # 7. Пальмы на четвертой дорожке
+            self.scene.add_sprite_list("PalmObstacles")
+            self.palm_spawner = PalmSpawner(self.scene["PalmObstacles"])
+
+            # 8. Создаем и добавляем охотника
             self.hunter_sprite = Hunter()
             self.hunter_sprite.setup()
 
@@ -107,36 +115,36 @@ class GameView(arcade.View):
             self.scene["Hunter"].append(self.hunter_sprite)
             self.hunter_sprite.run()
 
-            # 7. Инициализация менеджера пуль
+            # 9. Инициализация менеджера пуль
             self.bullet_manager = BulletManager()
             self.bullet_manager.setup(self.hunter_sprite)
             self.scene.add_sprite_list("Bullets", sprite_list=self.bullet_manager.sprite_list)
             self.bullet_manager.enable_shooting()  # Разрешаем стрельбу
 
-            # 8. Блик (поверх дорожек)
+            # 10. Блик (поверх дорожек)
             glare_sprite = arcade.Sprite(GLARE_EFFECT, center_x=SCREEN_CENTER[0], center_y=SCREEN_CENTER[1])
             self.scene.add_sprite_list("Effects")
             self.scene["Effects"].append(glare_sprite)
 
-            # 9. Рамка автомата (самый верхний слой)
+            # 11. Рамка автомата (самый верхний слой)
             frame_sprite = arcade.Sprite(SLOT_MACHINE_FRAME, center_x=SCREEN_CENTER[0], center_y=SCREEN_CENTER[1])
             self.scene.add_sprite_list("Frame")
             self.scene["Frame"].append(frame_sprite)
 
-            # 10. Загрузка звука галопа
+            # 12. Загрузка звука галопа
             try:
                 self.gallop_sound = arcade.Sound(GALLOP_SOUND_PATH)
                 self.gallop_player = self.gallop_sound.play(loop=True)
             except Exception as e:
                 print(f"❌ Ошибка загрузки звука галопа: {e}")
 
-            # 11. Настраиваем систему столкновений
+            # 13. Настраиваем систему столкновений
             if self.collision_system:
                 self.collision_system.setup(
                     bullet_manager=self.bullet_manager,
                     rhino_spawner=self.rhino_spawner,
                     bizon_spawner=self.bizon_spawner,
-                    # gazelle_spawner=self.gazelle_spawner,
+                    gazelle_spawner=self.gazelle_spawner,
                     palm_spawner=self.palm_spawner,
                 )
             else:
@@ -159,6 +167,8 @@ class GameView(arcade.View):
             self.rhino_spawner.update(delta_time)
         if self.bizon_spawner:
             self.bizon_spawner.update(delta_time)
+        if self.gazelle_spawner:
+            self.gazelle_spawner.update(delta_time)
         if self.barrier_spawner:
             self.barrier_spawner.update(delta_time)
 

@@ -62,20 +62,6 @@ TRACK_WIDTH = 590  # Ширина текстуры дорожки в пиксе�
 TRACK_ANIMATION_SPEED = 30  # пикселей в секунду
 TRACK_ANIMATION_AMPLITUDE = 4  # ±4 пикселя
 
-# Константы для 4 дорожки (пальмы)
-TRACK_INDEX_PALM = 3  # 4-я дорожка (индекс 3)
-TRACK_Y_PALM = TRACK_POSITIONS[TRACK_INDEX_PALM][1]
-PALM_SPAWN_X = GAME_FIELD_RIGHT
-PALM_DESPAWN_X = GAME_FIELD_LEFT - 30
-PALM_Y_OFFSET = 20  # Y-сдвиг для пальм
-PALMDEAD_Y_OFFSET = 12  # Y-сдвиг для сбитых пальм
-
-PALM_SPEED = 50  # пикселей в секунду
-PALM_SPAWN_INTERVAL_MIN = 3000  # милисекунды
-PALM_SPAWN_INTERVAL_MAX = 6000  # милисекунды
-PALM_ALIVE_SPRITE = ":slot_machine:/images/obstacles/palm_alive.png"
-PALM_DEAD_SPRITE = ":slot_machine:/images/obstacles/palm_dead.png"
-
 # Константы для 1 дорожки (носороги)
 TRACK_INDEX_RHINO = 0  # 1-я дорожка (индекс 0)
 TRACK_Y_RHINO = TRACK_POSITIONS[TRACK_INDEX_RHINO][1]
@@ -103,6 +89,34 @@ BIZON_SPAWN_INTERVAL_MAX = 6000  # милисекунды
 BIZON_1_SPRITE = ":slot_machine:/images/animals/bizon/run_1.png"
 BIZON_2_SPRITE = ":slot_machine:/images/animals/bizon/run_2.png"
 BIZON_3_SPRITE = ":slot_machine:/images/animals/bizon/run_3.png"
+
+# Константы для 3 дорожки (газели)
+TRACK_INDEX_GAZELLE = 2  # 3-я дорожка (индекс 2)
+TRACK_Y_GAZELLE = TRACK_POSITIONS[TRACK_INDEX_GAZELLE][1]
+GAZELLE_SPAWN_X = GAME_FIELD_RIGHT + 30
+GAZELLE_DESPAWN_X = GAME_FIELD_LEFT
+GAZELLE_Y_OFFSET = 20  # Y-сдвиг для газелей
+
+GAZELLE_SPEED = 26  # пикселей в секунду
+GAZELLE_SPAWN_INTERVAL_MIN = 4000  # милисекунды
+GAZELLE_SPAWN_INTERVAL_MAX = 6000  # милисекунды
+GAZELLE_1_SPRITE = ":slot_machine:/images/animals/gazelle/run_1.png"
+GAZELLE_2_SPRITE = ":slot_machine:/images/animals/gazelle/run_2.png"
+GAZELLE_3_SPRITE = ":slot_machine:/images/animals/gazelle/run_3.png"
+
+# Константы для 4 дорожки (пальмы)
+TRACK_INDEX_PALM = 3  # 4-я дорожка (индекс 3)
+TRACK_Y_PALM = TRACK_POSITIONS[TRACK_INDEX_PALM][1]
+PALM_SPAWN_X = GAME_FIELD_RIGHT
+PALM_DESPAWN_X = GAME_FIELD_LEFT - 30
+PALM_Y_OFFSET = 20  # Y-сдвиг для пальм
+PALMDEAD_Y_OFFSET = 12  # Y-сдвиг для сбитых пальм
+
+PALM_SPEED = 50  # пикселей в секунду
+PALM_SPAWN_INTERVAL_MIN = 3000  # милисекунды
+PALM_SPAWN_INTERVAL_MAX = 6000  # милисекунды
+PALM_ALIVE_SPRITE = ":slot_machine:/images/obstacles/palm_alive.png"
+PALM_DEAD_SPRITE = ":slot_machine:/images/obstacles/palm_dead.png"
 
 # Константы для 5 дорожки (охотник и препятствия)
 HUNTER_TRACK_INDEX = 4  # 5-я дорожка (индекс 4)

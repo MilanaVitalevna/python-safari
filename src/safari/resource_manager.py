@@ -14,6 +14,9 @@ from .constants import (
     BIZON_3_SPRITE,
     BULLET_SPRITE_PATH,
     FIRE_SOUND_PATH,
+    GAZELLE_1_SPRITE,
+    GAZELLE_2_SPRITE,
+    GAZELLE_3_SPRITE,
     HUNTER_1_SPRITE,
     HUNTER_2_SPRITE,
     HUNTER_3_SPRITE,
@@ -37,6 +40,10 @@ class Textures:
 
     # Текстуры носорога
     rhino: list[arcade.Texture] = field(default_factory=list)
+    # Текстуры бизона
+    bizon: list[arcade.Texture] = field(default_factory=list)
+    # Текстуры газели
+    gazelle: list[arcade.Texture] = field(default_factory=list)
 
     # Текстуры пальмы
     palm_alive: arcade.Texture = None
@@ -100,6 +107,18 @@ def load_textures():
     except Exception as e:
         print(f"❌ Ошибка загрузки текстур бизона: {e}")
         Textures.bizon = []
+
+    # Загружаем текстуры газели
+    try:
+        Textures.gazelle = [
+            arcade.load_texture(GAZELLE_1_SPRITE),
+            arcade.load_texture(GAZELLE_2_SPRITE),
+            arcade.load_texture(GAZELLE_3_SPRITE),
+        ]
+        print(f"✅ Загружены {len(Textures.gazelle)} текстур газели")
+    except Exception as e:
+        print(f"❌ Ошибка загрузки текстур газели: {e}")
+        Textures.gazelle = []
 
     # Загружаем текстуры пальмы
     try:
