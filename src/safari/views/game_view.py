@@ -24,13 +24,15 @@ from ..constants import (
     TV_BACKGROUND,
 )
 from ..entities.animals.bizon.bizon_spawner import BizonSpawner
-from ..entities.animals.gazelle.bizon_spawner import GazelleSpawner
+from ..entities.animals.gazelle.gazelle_spawner import GazelleSpawner
 from ..entities.animals.rhino.rhino_spawner import RhinoSpawner
 from ..entities.bullet.bullet_manager import BulletManager
 from ..entities.hunter.hunter import Hunter
 from ..entities.obstacles.barrier_spawner import BarrierSpawner
 from ..entities.obstacles.palm_spawner import PalmSpawner
 from ..entities.track import Track
+from ..ui.button_animation_manager import ButtonAnimationManager
+from ..ui.shot_indicator_manager import ShotIndicatorManager
 
 
 class GameView(arcade.View):
@@ -54,6 +56,10 @@ class GameView(arcade.View):
         self.barrier_spawner = None
         self.hunter_sprite = None
         self.bullet_manager = None
+
+        self.shot_indicators = None
+        # Менеджер анимации кнопки
+        self.button_animation = None
 
         # Сначала создаем систему столкновений
         self.collision_system = CollisionSystem()
@@ -131,6 +137,14 @@ class GameView(arcade.View):
             self.scene.add_sprite_list("Frame")
             self.scene["Frame"].append(frame_sprite)
 
+            # Индикаторы выстрелов
+            self.shot_indicators = ShotIndicatorManager()
+            self.shot_indicators.setup()
+
+            # Анимация кнопки
+            self.button_animation = ButtonAnimationManager()
+            self.button_animation.setup()
+
             # 12. Загрузка звука галопа
             try:
                 self.gallop_sound = arcade.Sound(GALLOP_SOUND_PATH)
@@ -181,9 +195,14 @@ class GameView(arcade.View):
 
         # 4. Обновляем пули
         if self.bullet_manager:
+            self.shot_indicators.update(self.bullet_manager.shots_fired)
             self.bullet_manager.update(delta_time)
 
-        # 5. Проверяем столкновения пуль с объектами
+        # 5. Обновляем анимацию кнопки
+        if self.button_animation:
+            self.button_animation.update(delta_time)
+
+        # 6. Проверяем столкновения пуль с объектами
         self.collision_system.update()
 
     def on_draw(self):
@@ -191,6 +210,8 @@ class GameView(arcade.View):
 
         # Отрисовка в порядке добавления слоёв: Background → Tracks → Effects → Frame
         self.scene.draw()
+        self.shot_indicators.draw()  # Рисуем индикаторы выстрелов поверх всего
+        self.button_animation.draw()  # Кнопка поверх всего
 
     def on_key_press(self, key, _):
         if key == arcade.key.ESCAPE:
@@ -199,4 +220,9 @@ class GameView(arcade.View):
             arcade.exit()
 
         if key == arcade.key.SPACE and self.bullet_manager:
-            self.bullet_manager.fire()
+            # Пытаемся сделать выстрел и проверяем результат
+            shot_successful = self.bullet_manager.fire()
+
+            # Запускаем анимацию кнопки только если выстрел успешен
+            if shot_successful and self.button_animation:
+                self.button_animation.press()

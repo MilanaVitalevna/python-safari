@@ -5,7 +5,7 @@
 
 import arcade
 
-from src.safari.resource_manager import Textures
+from ..resource_manager import Textures
 
 
 class CollisionSystem:

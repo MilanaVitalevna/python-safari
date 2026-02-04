@@ -162,3 +162,50 @@ MAX_SHOTS_TOTAL = 16  # Максимум 16 выстрелов за игру
 # Звуки
 FIRE_SOUND_PATH = SOUNDS_PATH / "fire.ogg"
 SHOT_SOUND_PATH = SOUNDS_PATH / "shot.ogg"
+
+# Позиции индикаторов выстрелов (16 лампочек)
+SHOT_INDICATOR_POSITIONS = [
+    (138, 168),  # 1
+    (186, 168),  # 2
+    (236, 168),  # 3
+    (284, 168),  # 4
+    (333, 168),  # 5
+    (381, 168),  # 6
+    (430, 168),  # 7
+    (479, 168),  # 8
+    (527, 168),  # 9
+    (576, 168),  # 10
+    (624, 168),  # 11
+    (671, 168),  # 12
+    (721, 168),  # 13
+    (770, 168),  # 14
+    (818, 168),  # 15
+    (867, 168),  # 16
+]
+
+# Пути к текстурам индикаторов выстрелов
+SHOT_INDICATOR_PATHS = [
+    ":slot_machine:/images/ui/indicators/shot_01.png",
+    ":slot_machine:/images/ui/indicators/shot_02.png",
+    ":slot_machine:/images/ui/indicators/shot_03.png",
+    ":slot_machine:/images/ui/indicators/shot_04.png",
+    ":slot_machine:/images/ui/indicators/shot_05.png",
+    ":slot_machine:/images/ui/indicators/shot_06.png",
+    ":slot_machine:/images/ui/indicators/shot_07.png",
+    ":slot_machine:/images/ui/indicators/shot_08.png",
+    ":slot_machine:/images/ui/indicators/shot_09.png",
+    ":slot_machine:/images/ui/indicators/shot_10.png",
+    ":slot_machine:/images/ui/indicators/shot_11.png",
+    ":slot_machine:/images/ui/indicators/shot_12.png",
+    ":slot_machine:/images/ui/indicators/shot_13.png",
+    ":slot_machine:/images/ui/indicators/shot_14.png",
+    ":slot_machine:/images/ui/indicators/shot_15.png",
+    ":slot_machine:/images/ui/indicators/shot_16.png",
+]
+
+# Путь к текстуре нажатой кнопки
+BUTTON_PRESSED_SPRITE = ":slot_machine:/images/ui/button/button_pressed.png"
+# Позиция кнопки (середина по X, примерно 140 по Y)
+BUTTON_POSITION = (SCREEN_WIDTH // 2, 133)  # примерно (512, 140)
+# Длительность анимации нажатия кнопки в секундах
+BUTTON_PRESS_DURATION = 0.4  # 400 мс

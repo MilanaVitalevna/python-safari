@@ -13,6 +13,7 @@ from .constants import (
     BIZON_2_SPRITE,
     BIZON_3_SPRITE,
     BULLET_SPRITE_PATH,
+    BUTTON_PRESSED_SPRITE,
     FIRE_SOUND_PATH,
     GAZELLE_1_SPRITE,
     GAZELLE_2_SPRITE,
@@ -29,6 +30,7 @@ from .constants import (
     RHINO_2_SPRITE,
     RHINO_3_SPRITE,
     SAFARI_FONT_PATH,
+    SHOT_INDICATOR_PATHS,
     SHOT_SOUND_PATH,
 )
 
@@ -57,6 +59,12 @@ class Textures:
 
     # Текстура пули
     bullet: arcade.Texture = None
+
+    # Текстуры индикаторов выстрелов (список из 16 текстур)
+    shot_indicators: list[arcade.Texture] = field(default_factory=list)
+
+    # Текстура кнопки стрельбы
+    button_pressed: arcade.Texture = None
 
     # Звуки
     fire_sound: arcade.Sound = None
@@ -157,6 +165,24 @@ def load_textures():
         print("✅ Загружена текстура пули")
     except Exception as e:
         print(f"❌ Ошибка загрузки текстуры пули: {e}")
+
+    # Загружаем текстуры индикаторов выстрелов
+    try:
+        Textures.shot_indicators = []
+        for _i, path in enumerate(SHOT_INDICATOR_PATHS):
+            texture = arcade.load_texture(path)
+            Textures.shot_indicators.append(texture)
+        print(f"✅ Загружены {len(Textures.shot_indicators)} текстур индикаторов выстрелов")
+    except Exception as e:
+        print(f"❌ Ошибка загрузки текстур индикаторов: {e}")
+        Textures.shot_indicators = []
+
+    # Загружаем текстуру нажатой кнопки
+    try:
+        Textures.button_pressed = arcade.load_texture(BUTTON_PRESSED_SPRITE)
+        print("✅ Загружена текстура нажатой кнопки")
+    except Exception as e:
+        print(f"❌ Ошибка загрузки текстуры кнопки: {e}")
 
     # Загружаем звуки для стрельбы
     try:

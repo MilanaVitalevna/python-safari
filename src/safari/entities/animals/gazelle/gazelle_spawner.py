@@ -3,7 +3,7 @@ import random
 import arcade
 
 from src.safari.constants import GAZELLE_SPAWN_INTERVAL_MAX, GAZELLE_SPAWN_INTERVAL_MIN
-from src.safari.entities.animals.gazelle.bizon import Gazelle
+from src.safari.entities.animals.gazelle.gazelle import Gazelle
 
 
 class GazelleSpawner:
