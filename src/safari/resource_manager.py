@@ -21,6 +21,7 @@ from .constants import (
     HUNTER_1_SPRITE,
     HUNTER_2_SPRITE,
     HUNTER_3_SPRITE,
+    HUNTER_JUMP_DURATION,
     HUNTER_JUMP_SPRITE,
     PALM_ALIVE_SPRITE,
     PALM_DEAD_SPRITE,
@@ -38,14 +39,16 @@ from .constants import (
 # Простой DateTransferObject для текстур
 @dataclass
 class Textures:
-    """Простой контейнер для всех загруженных текстур."""
+    """Простой контейнер для всех загруженных текстур, анимаций и звуков."""
 
-    # Текстуры носорога
-    rhino: list[arcade.Texture] = field(default_factory=list)
-    # Текстуры бизона
-    bizon: list[arcade.Texture] = field(default_factory=list)
-    # Текстуры газели
-    gazelle: list[arcade.Texture] = field(default_factory=list)
+    # Анимации животных
+    rhino_animation: arcade.TextureAnimation | None = None
+    bizon_animation: arcade.TextureAnimation | None = None
+    gazelle_animation: arcade.TextureAnimation | None = None
+
+    # Анимации охотника
+    hunter_run_animation: arcade.TextureAnimation | None = None
+    hunter_jump_animation: arcade.TextureAnimation | None = None
 
     # Текстуры пальмы
     palm_alive: arcade.Texture = None
@@ -53,9 +56,6 @@ class Textures:
 
     # Текстура барьера
     barrier: arcade.Texture = None
-
-    # Текстуры охотника
-    hunter: list[arcade.Texture] = field(default_factory=list)
 
     # Текстура пули
     bullet: arcade.Texture = None
@@ -92,42 +92,6 @@ def load_textures():
     """Загрузка всех текстур в Textures."""
     print("🎨 Загрузка текстур...")
 
-    # Загружаем текстуры носорога
-    try:
-        Textures.rhino = [
-            arcade.load_texture(RHINO_1_SPRITE),
-            arcade.load_texture(RHINO_2_SPRITE),
-            arcade.load_texture(RHINO_3_SPRITE),
-        ]
-        print(f"✅ Загружены {len(Textures.rhino)} текстур носорога")
-    except Exception as e:
-        print(f"❌ Ошибка загрузки текстур носорога: {e}")
-        Textures.rhino = []
-
-    # Загружаем текстуры бизона
-    try:
-        Textures.bizon = [
-            arcade.load_texture(BIZON_1_SPRITE),
-            arcade.load_texture(BIZON_2_SPRITE),
-            arcade.load_texture(BIZON_3_SPRITE),
-        ]
-        print(f"✅ Загружены {len(Textures.bizon)} текстур бизона")
-    except Exception as e:
-        print(f"❌ Ошибка загрузки текстур бизона: {e}")
-        Textures.bizon = []
-
-    # Загружаем текстуры газели
-    try:
-        Textures.gazelle = [
-            arcade.load_texture(GAZELLE_1_SPRITE),
-            arcade.load_texture(GAZELLE_2_SPRITE),
-            arcade.load_texture(GAZELLE_3_SPRITE),
-        ]
-        print(f"✅ Загружены {len(Textures.gazelle)} текстур газели")
-    except Exception as e:
-        print(f"❌ Ошибка загрузки текстур газели: {e}")
-        Textures.gazelle = []
-
     # Загружаем текстуры пальмы
     try:
         Textures.palm_alive = arcade.load_texture(PALM_ALIVE_SPRITE)
@@ -145,19 +109,6 @@ def load_textures():
             print("⚠️ BARRIER_SPRITE не определен")
     except Exception as e:
         print(f"❌ Ошибка загрузки текстуры барьера: {e}")
-
-    # Загружаем текстуры охотника
-    try:
-        Textures.hunter = [
-            arcade.load_texture(HUNTER_1_SPRITE),
-            arcade.load_texture(HUNTER_2_SPRITE),
-            arcade.load_texture(HUNTER_3_SPRITE),
-            arcade.load_texture(HUNTER_JUMP_SPRITE),
-        ]
-        print(f"✅ Загружены {len(Textures.hunter)} текстур охотника")
-    except Exception as e:
-        print(f"❌ Ошибка загрузки текстур охотника: {e}")
-        Textures.hunter = []
 
     # Загружаем текстуру пули
     try:
@@ -184,6 +135,10 @@ def load_textures():
     except Exception as e:
         print(f"❌ Ошибка загрузки текстуры кнопки: {e}")
 
+    print("🎨 Загрузка текстур завершена")
+
+
+def load_sounds():
     # Загружаем звуки для стрельбы
     try:
         if FIRE_SOUND_PATH.exists():
@@ -199,7 +154,73 @@ def load_textures():
     except Exception as e:
         print(f"❌ Ошибка загрузки звука попадания: {e}")
 
-    print("🎨 Загрузка текстур завершена")
+
+def create_animations():
+    """Создает все анимации игры."""
+
+    print("🎬 Создание анимаций...")
+    # Носорог (прямая загрузка текстур в keyframes)
+    try:
+        keyframes = [
+            arcade.TextureKeyframe(arcade.load_texture(RHINO_1_SPRITE), 120),
+            arcade.TextureKeyframe(arcade.load_texture(RHINO_2_SPRITE), 80),
+            arcade.TextureKeyframe(arcade.load_texture(RHINO_3_SPRITE), 120),
+        ]
+        Textures.rhino_animation = arcade.TextureAnimation(keyframes)
+        print("✅ Создана анимация носорога")
+    except Exception as e:
+        print(f"❌ Ошибка создания анимации носорога: {e}")
+        Textures.rhino_animation = None
+
+    # Бизон (прямая загрузка текстур в keyframes)
+    try:
+        keyframes = [
+            arcade.TextureKeyframe(arcade.load_texture(BIZON_1_SPRITE), 100),
+            arcade.TextureKeyframe(arcade.load_texture(BIZON_2_SPRITE), 100),
+            arcade.TextureKeyframe(arcade.load_texture(BIZON_3_SPRITE), 100),
+        ]
+        Textures.bizon_animation = arcade.TextureAnimation(keyframes)
+        print("✅ Создана анимация бизона")
+    except Exception as e:
+        print(f"❌ Ошибка создания анимации бизона: {e}")
+        Textures.bizon_animation = None
+
+    # Газель (прямая загрузка текстур в keyframes)
+    try:
+        keyframes = [
+            arcade.TextureKeyframe(arcade.load_texture(GAZELLE_1_SPRITE), 100),
+            arcade.TextureKeyframe(arcade.load_texture(GAZELLE_2_SPRITE), 100),
+            arcade.TextureKeyframe(arcade.load_texture(GAZELLE_3_SPRITE), 100),
+        ]
+        Textures.gazelle_animation = arcade.TextureAnimation(keyframes)
+        print("✅ Создана анимация газели")
+    except Exception as e:
+        print(f"❌ Ошибка создания анимации газели: {e}")
+        Textures.gazelle_animation = None
+
+    try:
+        # Анимация бега охотника
+        hunter_run_keyframes = [
+            arcade.TextureKeyframe(arcade.load_texture(HUNTER_1_SPRITE)),
+            arcade.TextureKeyframe(arcade.load_texture(HUNTER_2_SPRITE)),
+            arcade.TextureKeyframe(arcade.load_texture(HUNTER_3_SPRITE)),
+        ]
+        Textures.hunter_run_animation = arcade.TextureAnimation(hunter_run_keyframes)
+        print("✅ Создана анимация бега охотника")
+
+        # Анимация прыжка охотника (можно сделать из одного кадра)
+        hunter_jump_keyframes = [
+            arcade.TextureKeyframe(arcade.load_texture(HUNTER_JUMP_SPRITE), HUNTER_JUMP_DURATION),
+        ]
+        Textures.hunter_jump_animation = arcade.TextureAnimation(hunter_jump_keyframes)
+        print("✅ Создана анимация прыжка охотника")
+
+    except Exception as e:
+        print(f"❌ Ошибка создания анимаций охотника: {e}")
+        Textures.hunter_run_animation = None
+        Textures.hunter_jump_animation = None
+
+    print("🎬 Анимации созданы")
 
 
 def setup_resources():
@@ -217,3 +238,9 @@ def setup_resources():
 
     # 3. Загружаем текстуры
     load_textures()
+
+    # 4. Загружаем звуки
+    load_sounds()
+
+    # 4. Создаем анимации
+    create_animations()

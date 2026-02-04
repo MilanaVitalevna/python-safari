@@ -28,10 +28,6 @@ class Barrier(arcade.Sprite):
         # Инициализация текстуры
         self.barrier_texture = None
 
-        # Размеры будут установлены в setup()
-        self._width = 0
-        self._height = 0
-
         # Скорость движения
         self.speed = BARRIER_SPEED
 
@@ -54,9 +50,9 @@ class Barrier(arcade.Sprite):
         self.barrier_texture = Textures.barrier
         self.texture = self.barrier_texture  # ← Теперь texture устанавливаем ТОЛЬКО здесь
 
-        # Сохраняем размеры для быстрого доступа
-        self._width = self.texture.width
-        self._height = self.texture.height
+        # Размеры устанавливаются автоматически при установке текстуры
+        self.width = self.texture.width
+        self.height = self.texture.height
 
     def on_update(self, delta_time: float = 1 / 60):
         """Обновление состояния: движение справа налево."""

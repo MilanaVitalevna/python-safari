@@ -5,6 +5,7 @@
 
 import arcade
 
+from ..entities.animals.rhino.rhino import Rhino
 from ..resource_manager import Textures
 
 
@@ -40,9 +41,9 @@ class CollisionSystem:
 
         # Определяем какие типы объектов проверять на столкновения
         self.collision_pairs = [
-            (rhino_spawner.active_rhinos, "rhino"),
-            (bizon_spawner.active_bizons, "bizon"),
-            (gazelle_spawner.active_gazelles, "gazelle"),
+            (rhino_spawner.active_animals, "rhino"),
+            (bizon_spawner.active_animals, "bizon"),
+            (gazelle_spawner.active_animals, "gazelle"),
             (palm_spawner.active_palms, "palm"),
         ]
 
@@ -89,7 +90,11 @@ class CollisionSystem:
         if hasattr(target, "on_hit"):
             target.on_hit()
 
-        # 3. Воспроизводим звук попадания
+        # 3. Особый случай: если это носорог, сообщаем spawner'у
+        if isinstance(target, Rhino) and self.rhino_spawner:
+            self.rhino_spawner.mark_as_hit()
+
+        # 4. Воспроизводим звук попадания
         self._play_shot_sound()
 
     def _play_shot_sound(self):

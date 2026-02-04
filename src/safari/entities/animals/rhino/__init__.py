@@ -1,3 +1,3 @@
 """
-Safari Arcade Game - Soviet slot machine recreation
+Инициализация модуля носорога.
 """

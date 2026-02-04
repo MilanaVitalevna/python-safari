@@ -54,7 +54,7 @@ class GameView(arcade.View):
         self.bizon_spawner = None
         self.gazelle_spawner = None
         self.barrier_spawner = None
-        self.hunter_sprite = None
+        self.hunter_sprite: Hunter | None = None
         self.bullet_manager = None
 
         self.shot_indicators = None
@@ -114,12 +114,10 @@ class GameView(arcade.View):
             self.palm_spawner = PalmSpawner(self.scene["PalmObstacles"])
 
             # 8. Создаем и добавляем охотника
-            self.hunter_sprite = Hunter()
-            self.hunter_sprite.setup()
+            self.hunter_sprite: arcade.TextureAnimationSprite = Hunter()
 
             self.scene.add_sprite_list("Hunter", sprite_list=arcade.SpriteList())
             self.scene["Hunter"].append(self.hunter_sprite)
-            self.hunter_sprite.run()
 
             # 9. Инициализация менеджера пуль
             self.bullet_manager = BulletManager()

@@ -32,10 +32,6 @@ class Palm(arcade.Sprite):
         self.alive_texture = None
         self.dead_texture = None
 
-        # Размеры будут установлены в setup()
-        self._width = 0
-        self._height = 0
-
         # Флаг состояния
         self.is_alive = True
 
@@ -64,9 +60,9 @@ class Palm(arcade.Sprite):
         # Устанавливаем начальную текстуру (живая пальма)
         self.texture = self.alive_texture
 
-        # Сохраняем размеры для быстрого доступа
-        self._width = self.texture.width
-        self._height = self.texture.height
+        # Размеры устанавливаются автоматически при установке текстуры
+        self.width = self.texture.width
+        self.height = self.texture.height
 
     def on_update(self, delta_time: float = 1 / 60):
         """Обновление состояния: движение справа налево."""
