@@ -19,6 +19,7 @@ class BarrierSpawner:
         self.sprite_list = sprite_list
 
         # Сразу создаем первый барьер при инициализации
+        self.is_active = True  # Можно ли создавать новые препятствия
         self._spawn_barrier()
         self.time_since_last_spawn = 0.0  # Сбрасываем таймер
         self.spawn_interval = self._get_random_interval()  # Генерируем новый интервал
@@ -66,3 +67,8 @@ class BarrierSpawner:
         for barrier in barriers_to_remove:
             self.active_barriers.remove(barrier)
             self.sprite_list.remove(barrier)
+
+    # Методы для управления состоянием
+    def stop_spawning(self):
+        """Останавливает создание новых препятствий."""
+        self.is_active = False

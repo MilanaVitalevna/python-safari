@@ -1,9 +1,9 @@
 import arcade
 
-from .game_over_view import GameOverView
 from ..collision.collision_system import CollisionSystem
 from ..constants import (
     GALLOP_SOUND_PATH,
+    GAME_TIME_SECONDS,
     GLARE_EFFECT,
     SCREEN_CENTER,
     SLOT_MACHINE_FRAME,
@@ -18,9 +18,10 @@ from ..entities.hunter.hunter import Hunter
 from ..entities.obstacles.barrier_spawner import BarrierSpawner
 from ..entities.obstacles.palm_spawner import PalmSpawner
 from ..entities.track import Track
+from ..score_manager import ScoreManager
 from ..ui.button_animation_manager import ButtonAnimationManager
 from ..ui.shot_indicator_manager import ShotIndicatorManager
-from ..score_manager import ScoreManager
+from .game_over_view import GameOverView
 
 
 class GameView(arcade.View):
@@ -50,6 +51,8 @@ class GameView(arcade.View):
         self.button_animation = None
         # Менеджер очков
         self.score_manager = None
+        # Таймер игры
+        self.game_timer = None
 
         # Сначала создаем систему столкновений
         self.collision_system = CollisionSystem()
@@ -156,6 +159,9 @@ class GameView(arcade.View):
             else:
                 print("⚠️ collision_system не инициализирован!")
 
+            # Запускаем таймер на время игры GAME_TIME_SECONDS
+            self.game_timer = arcade.schedule_once(self.on_time_up, GAME_TIME_SECONDS)
+
         except Exception as e:
             print(f"❌ Ошибка загрузки фона в GameView: {e}")
 
@@ -195,50 +201,62 @@ class GameView(arcade.View):
             self.button_animation.update(delta_time)
 
         # 6. Проверяем столкновения пуль с объектами
-        self.collision_system.update()
+        if self.collision_system:
+            self.collision_system.update()
 
         # 7. Проверяем победу
         if self.score_manager and self.score_manager.is_victory():
-            print("🎉 ПОБЕДА! Все цели поражены!"                  
-                  f"Носорогов: {self.score_manager.rhino_kills}, "
-                  f"Бизонов: {self.score_manager.bizon_kills}, "
-                  f"Газелей: {self.score_manager.gazelle_kills}")
+            print(
+                "🎉 ПОБЕДА! Все цели поражены!"
+                f"Носорогов: {self.score_manager.rhino_kills}, "
+                f"Бизонов: {self.score_manager.bizon_kills}, "
+                f"Газелей: {self.score_manager.gazelle_kills}"
+            )
 
             # Завершаем игру и переходим на экран победы
             self._end_game_with_victory()
             return  # Прекращаем обновление игры
 
-    def _end_game_with_victory(self):
-        """Завершает игру при победе и переходит на экран результатов."""
-        print("🔄 Переход на экран победы...")
+    def on_time_up(self, _delta_time: float):
+        """Вызывается, когда заканчивается время."""
+        if self.score_manager and not self.score_manager.is_victory():
+            print("⏰ Время вышло! Победа не достигнута.")
+            self._end_game_with_defeat()
+            return
 
-        # Останавливаем звуки
+    def _end_game(self, victory: bool):
+        print("🔄 Переход на экран завершения игры...")
+
+        if self.game_timer:
+            arcade.unschedule(self.game_timer)
+            self.game_timer = None
+
         if self.gallop_player:
             self.gallop_player.pause()
 
-        # Останавливаем спавн объектов
-        if self.rhino_spawner:
-            self.rhino_spawner.stop_spawning()
-        if self.bizon_spawner:
-            self.bizon_spawner.stop_spawning()
-        if self.gazelle_spawner:
-            self.gazelle_spawner.stop_spawning()
-        # if self.barrier_spawner:
-        #     self.barrier_spawner.stop_spawning()
-        # if self.palm_spawner:
-        #     self.palm_spawner.stop_spawning()
+        # Останавливаем всех создателей
+        for spawner in [
+            self.rhino_spawner,
+            self.bizon_spawner,
+            self.gazelle_spawner,
+            self.barrier_spawner,
+            self.palm_spawner,
+        ]:
+            if spawner:
+                spawner.stop_spawning()
 
-        # Подготавливаем данные для передачи
-        score_data = {
-            'rhino_kills': self.score_manager.rhino_kills if self.score_manager else 0,
-            'bizon_kills': self.score_manager.bizon_kills if self.score_manager else 0,
-            'gazelle_kills': self.score_manager.gazelle_kills if self.score_manager else 0,
-            'shots_fired': self.bullet_manager.shots_fired if self.bullet_manager else 0,
-        }
-
-        # Переходим на экран завершения игры
-        game_over_view = GameOverView(score_data=score_data)
+        game_over_view = GameOverView(
+            score_data=self.score_manager.get_score_data(),
+            shots_fired=getattr(self.bullet_manager, "shots_fired", 0),
+            victory=victory,
+        )
         self.window.show_view(game_over_view)
+
+    def _end_game_with_defeat(self):
+        self._end_game(victory=False)
+
+    def _end_game_with_victory(self):
+        self._end_game(victory=True)
 
     def on_draw(self):
         self.clear()
@@ -246,10 +264,9 @@ class GameView(arcade.View):
         # Отрисовка в порядке добавления слоёв: Background → Tracks → Effects → Frame
         self.scene.draw()
         self.shot_indicators.draw()  # Рисуем индикаторы выстрелов поверх всего
-        self.button_animation.draw() # Кнопка стрельбы на автомате поверх всего
+        self.button_animation.draw()  # Кнопка стрельбы на автомате поверх всего
 
     def on_key_press(self, key, _):
-
         if key == arcade.key.ESCAPE:
             if self.gallop_player:
                 self.gallop_player.pause()

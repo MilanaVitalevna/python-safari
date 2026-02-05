@@ -5,34 +5,41 @@
 import arcade
 
 from ..constants import (
+    AVENTURA_FONT_NAME,
     GLARE_EFFECT,
+    INPUT_DELAY_SECONDS,
+    SAFARI_FONT_NAME,
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
     SLOT_MACHINE_FRAME,
     TV_BACKGROUND,
-    AVENTURA_FONT_NAME,
-    SAFARI_FONT_NAME,
-    INPUT_DELAY_SECONDS,
 )
+from .rules_view import RulesView
 
 
 class GameOverView(arcade.View):
     """Сцена: окно завершения игры при победе."""
 
-    def __init__(self, score_data: dict):
+    def __init__(self, score_data: dict, shots_fired: int, victory: bool):
         """
         Args:
             score_data: словарь с данными о счете
         """
         super().__init__()
 
-        self.score_data = score_data
+        self.score_data = {
+            # Распакуем словарь
+            **score_data,
+            "shots_fired": shots_fired,
+            "victory": victory,
+        }
+
         self.input_enabled = False  # Ввод клавиш запрещён до таймаута
 
         # Слои фона
         self.background_sprites = arcade.SpriteList()  # ТВ-экран
-        self.effect_sprites = arcade.SpriteList()      # Блик
-        self.slot_machine_sprite = arcade.SpriteList() # Рамка автомата
+        self.effect_sprites = arcade.SpriteList()  # Блик
+        self.slot_machine_sprite = arcade.SpriteList()  # Рамка автомата
 
         # Текстовые элементы
         self.title_text = None
@@ -46,33 +53,32 @@ class GameOverView(arcade.View):
         """Загрузка всех спрайтов фона и текста."""
         try:
             # Фон
-            tv_sprite = arcade.Sprite(
-                TV_BACKGROUND,
-                center_x=SCREEN_WIDTH / 2,
-                center_y=SCREEN_HEIGHT / 2
-            )
+            tv_sprite = arcade.Sprite(TV_BACKGROUND, center_x=SCREEN_WIDTH / 2, center_y=SCREEN_HEIGHT / 2)
             self.background_sprites.append(tv_sprite)
 
-            glare_sprite = arcade.Sprite(
-                GLARE_EFFECT,
-                center_x=SCREEN_WIDTH / 2,
-                center_y=SCREEN_HEIGHT / 2
-            )
+            glare_sprite = arcade.Sprite(GLARE_EFFECT, center_x=SCREEN_WIDTH / 2, center_y=SCREEN_HEIGHT / 2)
             self.effect_sprites.append(glare_sprite)
 
-            frame_sprite = arcade.Sprite(
-                SLOT_MACHINE_FRAME,
-                center_x=SCREEN_WIDTH / 2,
-                center_y=SCREEN_HEIGHT / 2
-            )
+            frame_sprite = arcade.Sprite(SLOT_MACHINE_FRAME, center_x=SCREEN_WIDTH / 2, center_y=SCREEN_HEIGHT / 2)
             self.slot_machine_sprite.append(frame_sprite)
 
             # Тексты
+            if self.score_data["victory"]:
+                title_text = "ПОБЕДА!"
+                result_text = "Все цели поражены!"
+                title_color = (50, 200, 50)
+                result_color = (255, 255, 255)
+            else:
+                title_text = "ПОРАЖЕНИЕ"
+                result_text = "Цели не достигнуты"
+                title_color = (255, 100, 100)
+                result_color = (255, 180, 180)
+
             self.title_text = arcade.Text(
-                "ПОБЕДА!",
+                title_text,
                 SCREEN_WIDTH / 2,
                 SCREEN_HEIGHT - 150,
-                (255, 50, 50),
+                title_color,
                 48,
                 anchor_x="center",
                 anchor_y="center",
@@ -81,10 +87,10 @@ class GameOverView(arcade.View):
             )
 
             self.result_text = arcade.Text(
-                "Все цели поражены!",
+                result_text,
                 SCREEN_WIDTH / 2,
                 SCREEN_HEIGHT - 220,
-                (255, 255, 255),
+                result_color,
                 28,
                 anchor_x="center",
                 anchor_y="center",
@@ -173,7 +179,6 @@ class GameOverView(arcade.View):
             return True
 
         if key == arcade.key.SPACE:
-            from .rules_view import RulesView
             self.window.show_view(RulesView())
             return True
 

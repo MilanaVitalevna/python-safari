@@ -36,9 +36,9 @@ class ScoreManager:
     def is_victory(self) -> bool:
         """Проверяет, достигнута ли победа."""
         return (
-                self.gazelle_kills >= VICTORY_REQUIREMENTS["gazelle"] and
-                self.bizon_kills >= VICTORY_REQUIREMENTS["bizon"] and
-                self.rhino_kills >= VICTORY_REQUIREMENTS["rhino"]
+            self.gazelle_kills >= VICTORY_REQUIREMENTS["gazelle"]
+            and self.bizon_kills >= VICTORY_REQUIREMENTS["bizon"]
+            and self.rhino_kills >= VICTORY_REQUIREMENTS["rhino"]
         )
 
     def reset(self):
@@ -46,3 +46,14 @@ class ScoreManager:
         self.gazelle_kills = 0
         self.bizon_kills = 0
         self.rhino_kills = 0
+
+    def get_score_data(self) -> dict:
+        """
+        Возвращает словарь с текущими данными счёта.
+        Используется для передачи статистики во view.
+        """
+        return {
+            "rhino_kills": self.rhino_kills,
+            "bizon_kills": self.bizon_kills,
+            "gazelle_kills": self.gazelle_kills,
+        }

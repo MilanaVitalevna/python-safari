@@ -19,6 +19,7 @@ class PalmSpawner:
         self.sprite_list = sprite_list
 
         # Сразу создаем первую пальму при инициализации
+        self.is_active = True  # Можно ли создавать новые пальмы
         self._spawn_palm()
         self.time_since_last_spawn = 0.0  # Сбрасываем таймер
         self.spawn_interval = self._get_random_interval()  # Генерируем новый интервал
@@ -67,3 +68,8 @@ class PalmSpawner:
         for palm in palms_to_remove:
             self.active_palms.remove(palm)
             self.sprite_list.remove(palm)
+
+    # Методы для управления состоянием
+    def stop_spawning(self):
+        """Останавливает создание новых пальм."""
+        self.is_active = False
