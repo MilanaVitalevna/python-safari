@@ -12,7 +12,7 @@ from ..resource_manager import Textures
 class ShotIndicatorManager:
     """
     Управляет индикаторами выстрелов.
-    Каждый выстрел активирует следующую лампочку.
+    Каждый выстрел деактивирует следующую лампочку.
     """
 
     def __init__(self):
@@ -20,6 +20,7 @@ class ShotIndicatorManager:
         self.indicators = []
         self.active_indicators = 0
         self.max_indicators = 16  # Фиксированное значение
+        self.min_indicators = 0
 
         # Используем SpriteList для удобной отрисовки
         self.sprite_list = arcade.SpriteList()
@@ -33,7 +34,10 @@ class ShotIndicatorManager:
             return
 
         # Проверяем, что текстуры загружены
-        if not Textures.shot_indicators or len(Textures.shot_indicators) != self.max_indicators:
+        if (
+            not Textures.shot_indicators
+            or len(Textures.shot_indicators) != self.max_indicators
+        ):
             print(
                 f"⚠️ Текстуры индикаторов не загружены или их количество неверное: "
                 f"{len(Textures.shot_indicators) if Textures.shot_indicators else 0}/{self.max_indicators}"
@@ -54,7 +58,7 @@ class ShotIndicatorManager:
                 indicator.texture = Textures.shot_indicators[i]
                 indicator.center_x = x
                 indicator.center_y = y
-                indicator.visible = False  # По умолчанию невидимы
+                indicator.visible = True  # По умолчанию видимы
                 self.indicators.append(indicator)
                 self.sprite_list.append(indicator)
             except Exception as e:
@@ -92,13 +96,8 @@ class ShotIndicatorManager:
             return
 
         # Обновляем видимость индикаторов
-        for i in range(min(self.max_indicators, len(self.indicators))):
-            if i < shots_fired:
-                self.indicators[i].visible = True
-            else:
-                self.indicators[i].visible = False
-
-        self.active_indicators = shots_fired
+        for i in range(-shots_fired, 0):  # [-1, -2, ..., -shots_fired]
+            self.indicators[i].visible = False
 
     def draw(self):
         """Отрисовывает все активные индикаторы."""
@@ -114,6 +113,6 @@ class ShotIndicatorManager:
             return
 
         for indicator in self.indicators:
-            indicator.visible = False
+            indicator.visible = True
         self.active_indicators = 0
         print("🔄 Индикаторы выстрелов сброшены")
