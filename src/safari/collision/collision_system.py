@@ -5,8 +5,11 @@
 
 import arcade
 
+from ..entities.animals.bizon.bizon import Bizon
+from ..entities.animals.gazelle.gazelle import Gazelle
 from ..entities.animals.rhino.rhino import Rhino
 from ..resource_manager import Textures
+from ..score_manager import ScoreManager
 
 
 class CollisionSystem:
@@ -17,12 +20,12 @@ class CollisionSystem:
         self.bizon_spawner = None
         self.gazelle_spawner = None
         self.palm_spawner = None
-        # Для будущих типов можно добавить здесь
+        self.score_manager = None
 
         # Список пар "пули-цели" для проверки
         self.collision_pairs = []
 
-    def setup(self, bullet_manager, rhino_spawner, bizon_spawner, gazelle_spawner, palm_spawner):
+    def setup(self, bullet_manager, rhino_spawner, bizon_spawner, gazelle_spawner, palm_spawner, score_manager):
         """
         Настройка системы столкновений.
 
@@ -32,12 +35,14 @@ class CollisionSystem:
             bizon_spawner: создатель бизонов
             gazelle_spawner: создатель газелей
             palm_spawner: создатель пальм
+            score_manager: менеджер счёта
         """
         self.bullet_manager = bullet_manager
         self.rhino_spawner = rhino_spawner
         self.bizon_spawner = bizon_spawner
         self.gazelle_spawner = gazelle_spawner
         self.palm_spawner = palm_spawner
+        self.score_manager = score_manager
 
         # Определяем какие типы объектов проверять на столкновения
         self.collision_pairs = [
@@ -90,12 +95,22 @@ class CollisionSystem:
         if hasattr(target, "on_hit"):
             target.on_hit()
 
-        # 3. Особый случай: если это носорог, сообщаем spawner'у
-        if isinstance(target, Rhino) and self.rhino_spawner:
-            self.rhino_spawner.mark_as_hit()
-
-        # 4. Воспроизводим звук попадания
-        self._play_shot_sound()
+        # 3. Наращиваем счет
+        match target:
+            case Rhino() if self.rhino_spawner:
+                # обработка для Rhino
+                self.score_manager.register_kill("rhino")
+                Textures.shot_sound.play()
+                # Особый случай: если это носорог, сообщаем spawner'у
+                self.rhino_spawner.mark_as_hit()
+            case Gazelle():
+                # обработка для Gazelle
+                self.score_manager.register_kill("gazelle")
+                Textures.shot_sound.play()
+            case Bizon():
+                # обработка для Bizon
+                self.score_manager.register_kill("bizon")
+                Textures.shot_sound.play()
 
     def _play_shot_sound(self):
         """Воспроизводит звук попадания."""

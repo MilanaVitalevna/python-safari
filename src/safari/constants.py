@@ -156,7 +156,7 @@ BULLET_MIN_Y = 85  # нижний край для удаления
 BULLET_START_OFFSET_X = 25  # смещение от позиции охотника по X
 BULLET_START_OFFSET_Y = 10  # смещение от позиции охотника по Y
 # Ограничения
-MIN_TIME_SINCE_LAST_SHOT = 1.0  # Минимальная задержка между выстрелами
+MIN_TIME_SINCE_LAST_SHOT = 0.5  # Минимальная задержка между выстрелами
 MAX_SHOTS_TOTAL = 16  # Максимум 16 выстрелов за игру
 
 # Звуки
@@ -209,3 +209,12 @@ BUTTON_PRESSED_SPRITE = ":slot_machine:/images/ui/button/button_pressed.png"
 BUTTON_POSITION = (SCREEN_WIDTH // 2, 133)  # примерно (512, 140)
 # Длительность анимации нажатия кнопки в секундах
 BUTTON_PRESS_DURATION = 0.4  # 400 мс
+
+# Требования для победы
+VICTORY_REQUIREMENTS = {
+    "gazelle": 8,  # Нужно убить 8 газелей
+    "bizon": 4,    # Нужно убить 4 бизона
+    "rhino": 1     # Нужно убить 1 носорога
+}
+
+INPUT_DELAY_SECONDS = 2
