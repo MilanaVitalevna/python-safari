@@ -232,3 +232,48 @@ MAX_SHOTS_TOTAL = 16  # Максимум 16 выстрелов за игру
 # GAME_TIME_SECONDS = 20  # для отладки в 20 секунд
 # MIN_TIME_SINCE_LAST_SHOT = 0.1  # Для отладки: минимальная задержка между выстрелами
 # MAX_SHOTS_TOTAL = 160  # Для отладки: 160 выстрелов за игру
+
+GAZELLE_INDICATOR_POSITIONS = [
+    (33, 62),  # 1
+    (87, 62),  # 2
+    (139, 62),  # 3
+    (193, 62),  # 4
+    (251, 62),  # 5
+    (307, 62),  # 6
+    (366, 62),  # 7
+    (426, 62),  # 8
+]
+
+BIZON_INDICATOR_POSITIONS = [
+    (713, 62),  # 1
+    (765, 62),  # 2
+    (821, 62),  # 3
+    (878, 62),  # 4
+]
+
+RHINO_INDICATOR_POSITIONS = [
+    (990, 62),  # 1
+]
+
+# Пути к текстурам индикаторов
+GAZELLE_INDICATOR_PATHS = [
+    ":slot_machine:/images/ui/indicators/gazelle_1.png",
+    ":slot_machine:/images/ui/indicators/gazelle_2.png",
+    ":slot_machine:/images/ui/indicators/gazelle_3.png",
+    ":slot_machine:/images/ui/indicators/gazelle_4.png",
+    ":slot_machine:/images/ui/indicators/gazelle_5.png",
+    ":slot_machine:/images/ui/indicators/gazelle_6.png",
+    ":slot_machine:/images/ui/indicators/gazelle_7.png",
+    ":slot_machine:/images/ui/indicators/gazelle_8.png",
+]
+
+BIZON_INDICATOR_PATHS = [
+    ":slot_machine:/images/ui/indicators/bizon_1.png",
+    ":slot_machine:/images/ui/indicators/bizon_2.png",
+    ":slot_machine:/images/ui/indicators/bizon_3.png",
+    ":slot_machine:/images/ui/indicators/bizon_4.png",
+]
+
+RHINO_INDICATOR_PATHS = [
+    ":slot_machine:/images/ui/indicators/rhino.png",
+]

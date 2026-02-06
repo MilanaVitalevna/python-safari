@@ -12,12 +12,14 @@ from .constants import (
     BIZON_1_SPRITE,
     BIZON_2_SPRITE,
     BIZON_3_SPRITE,
+    BIZON_INDICATOR_PATHS,
     BULLET_SPRITE_PATH,
     BUTTON_PRESSED_SPRITE,
     FIRE_SOUND_PATH,
     GAZELLE_1_SPRITE,
     GAZELLE_2_SPRITE,
     GAZELLE_3_SPRITE,
+    GAZELLE_INDICATOR_PATHS,
     HUNTER_1_SPRITE,
     HUNTER_2_SPRITE,
     HUNTER_3_SPRITE,
@@ -30,6 +32,7 @@ from .constants import (
     RHINO_1_SPRITE,
     RHINO_2_SPRITE,
     RHINO_3_SPRITE,
+    RHINO_INDICATOR_PATHS,
     SAFARI_FONT_PATH,
     SHOT_INDICATOR_PATHS,
     SHOT_SOUND_PATH,
@@ -62,6 +65,11 @@ class Textures:
 
     # Текстуры индикаторов выстрелов (список из 16 текстур)
     shot_indicators: list[arcade.Texture] = field(default_factory=list)
+
+    # Текстуры индикаторов убитых животных
+    gazelle_indicators: list[arcade.Texture] = field(default_factory=list)
+    bizon_indicators: list[arcade.Texture] = field(default_factory=list)
+    rhino_indicators: list[arcade.Texture] = field(default_factory=list)
 
     # Текстура кнопки стрельбы
     button_pressed: arcade.Texture = None
@@ -127,6 +135,41 @@ def load_textures():
     except Exception as e:
         print(f"❌ Ошибка загрузки текстур индикаторов: {e}")
         Textures.shot_indicators = []
+
+    # Загружаем текстуры индикаторов животных
+    try:
+        # Газели (8 лампочек)
+        Textures.gazelle_indicators = []
+        for i, path in enumerate(GAZELLE_INDICATOR_PATHS):
+            try:
+                texture = arcade.load_texture(path)
+                Textures.gazelle_indicators.append(texture)
+            except Exception as e:
+                print(f"❌ Ошибка загрузки индикатора газели #{i + 1}: {e}")
+        print(f"✅ Загружены {len(Textures.gazelle_indicators)} текстур индикаторов газелей")
+
+        # Бизоны (4 лампочки)
+        Textures.bizon_indicators = []
+        for i, path in enumerate(BIZON_INDICATOR_PATHS):
+            try:
+                texture = arcade.load_texture(path)
+                Textures.bizon_indicators.append(texture)
+            except Exception as e:
+                print(f"❌ Ошибка загрузки индикатора бизона #{i + 1}: {e}")
+        print(f"✅ Загружены {len(Textures.bizon_indicators)} текстур индикаторов бизонов")
+
+        # Носороги (1 лампочка)
+        Textures.rhino_indicators = []
+        for i, path in enumerate(RHINO_INDICATOR_PATHS):
+            try:
+                texture = arcade.load_texture(path)
+                Textures.rhino_indicators.append(texture)
+            except Exception as e:
+                print(f"❌ Ошибка загрузки индикатора носорога #{i + 1}: {e}")
+        print(f"✅ Загружены {len(Textures.rhino_indicators)} текстур индикаторов носорогов")
+
+    except Exception as e:
+        print(f"❌ Общая ошибка загрузки текстур индикаторов: {e}")
 
     # Загружаем текстуру нажатой кнопки
     try:

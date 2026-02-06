@@ -9,7 +9,6 @@ from ..entities.animals.bizon.bizon import Bizon
 from ..entities.animals.gazelle.gazelle import Gazelle
 from ..entities.animals.rhino.rhino import Rhino
 from ..resource_manager import Textures
-from ..score_manager import ScoreManager
 
 
 class CollisionSystem:

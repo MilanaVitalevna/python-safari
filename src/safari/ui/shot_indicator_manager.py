@@ -34,10 +34,7 @@ class ShotIndicatorManager:
             return
 
         # Проверяем, что текстуры загружены
-        if (
-            not Textures.shot_indicators
-            or len(Textures.shot_indicators) != self.max_indicators
-        ):
+        if not Textures.shot_indicators or len(Textures.shot_indicators) != self.max_indicators:
             print(
                 f"⚠️ Текстуры индикаторов не загружены или их количество неверное: "
                 f"{len(Textures.shot_indicators) if Textures.shot_indicators else 0}/{self.max_indicators}"

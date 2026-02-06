@@ -19,6 +19,7 @@ from ..entities.obstacles.barrier_spawner import BarrierSpawner
 from ..entities.obstacles.palm_spawner import PalmSpawner
 from ..entities.track import Track
 from ..score_manager import ScoreManager
+from ..ui.animal_indicator_manager import AnimalIndicatorManager
 from ..ui.button_animation_manager import ButtonAnimationManager
 from ..ui.shot_indicator_manager import ShotIndicatorManager
 from .game_over_view import GameOverView
@@ -47,6 +48,7 @@ class GameView(arcade.View):
         self.bullet_manager = None
 
         self.shot_indicators = None
+        self.animal_indicators = None
         # Менеджер анимации кнопки
         self.button_animation = None
         # Менеджер очков
@@ -159,6 +161,10 @@ class GameView(arcade.View):
             else:
                 print("⚠️ collision_system не инициализирован!")
 
+            # 17. Индикаторы убитых животных
+            self.animal_indicators = AnimalIndicatorManager()
+            self.animal_indicators.setup()
+
             # Запускаем таймер на время игры GAME_TIME_SECONDS
             self.game_timer = arcade.schedule_once(self.on_time_up, GAME_TIME_SECONDS)
 
@@ -217,6 +223,12 @@ class GameView(arcade.View):
             self._end_game_with_victory()
             return  # Прекращаем обновление игры
 
+        # 8. Обновляем индикаторы животных
+        if self.animal_indicators and self.score_manager:
+            self.animal_indicators.update(
+                self.score_manager.gazelle_kills, self.score_manager.bizon_kills, self.score_manager.rhino_kills
+            )
+
     def on_time_up(self, _delta_time: float):
         """Вызывается, когда заканчивается время."""
         if self.score_manager and not self.score_manager.is_victory():
@@ -264,6 +276,7 @@ class GameView(arcade.View):
         # Отрисовка в порядке добавления слоёв: Background → Tracks → Effects → Frame
         self.scene.draw()
         self.shot_indicators.draw()  # Рисуем индикаторы выстрелов поверх всего
+        self.animal_indicators.draw()  # Рисуем индикаторы животных поверх всего
         self.button_animation.draw()  # Кнопка стрельбы на автомате поверх всего
 
     def on_key_press(self, key, _):
